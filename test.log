@@ -1,0 +1,26 @@
+/root/ecg_ai/FocusECG/FocusECG/finetune_test.py:126: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(args.ckpt_path, map_location='cpu')
+cuda
+cuda
+Namespace(all_encode_norm_layer='LayerNorm', batch_size=256, ckpt_path='/root/ecg_ai/FocusECG/FocusECG/ckpt/classifier/ptb-xl/FocusMae/202501072331/max_f1=0.7593538665750476.pth', class_n=5, classifier_head_name='mlp_v1', data_standardization=True, dataset_name='ptb-xl', decoder_depth=8, decoder_embed_dim=64, decoder_num_heads=8, device=device(type='cuda'), early_stop_patience=30, embed_dim=256, encoder_depth=48, encoder_num_heads=16, learning_rate=0.0001, mask_ratio=0.75, mask_type='period', max_epoch_num=100, mlp_ratio=2, model_name='FocusMae', norm_layer='LayerNorm', num_input_channels=1, num_layers=48, patch_length=50, patch_size=50, patch_stride=50, pretrain_model_freeze=True, scheduler_factor=0.8, scheduler_min_lr=1e-08, scheduler_patience=20, self_attn=True, self_attn_heads=16, signal_length=2500, task='test', test_data_path='/root/data/ptb-xl/test.txt', train_data_path='/root/data/p1-2_people2000_segmentall_sample_step100_data/index_0-42k_step:1.txt', use_cls_token=True, use_positional_encoding=True, val_data_path='/root/data/p1-2_people2000_segmentall_sample_step100_data/index_42-60k_step:1.txt', val_every_n_steps=40, weight_decay=0.001)
+testing:   0%|          | 0/6 [00:00<?, ?it/s]testing:  17%|█▋        | 1/6 [00:00<00:03,  1.28it/s]testing:  50%|█████     | 3/6 [00:00<00:00,  3.76it/s]testing:  83%|████████▎ | 5/6 [00:01<00:00,  5.78it/s]                                                      /root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+              precision    recall  f1-score   support
+
+           0       0.83      0.32      0.47       154
+           1       0.00      0.00      0.00        47
+           2       0.56      0.10      0.16       251
+           3       0.73      0.90      0.81       854
+           4       0.41      0.66      0.50       230
+
+    accuracy                           0.65      1536
+   macro avg       0.51      0.40      0.39      1536
+weighted avg       0.64      0.65      0.60      1536
+
+accuracy = 0.6490885416666666, macro_p = 0.5050004607655212, macro_r = 0.396159171664648, macro_f1 = 0.38769649477091644, AUROC = 0.7491036729213552
