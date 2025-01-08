@@ -7,9 +7,9 @@ export PYTHONPATH=$(pwd)
 
 python main.py \
     --task "finetune" \
-    --dataset_name "ptb-xl" \
-    --train_data_path "/root/data/ptb-xl/train.txt" \
-    --val_data_path "/root/data/ptb-xl/val.txt" \
+    --dataset_name "cpsc2018" \
+    --train_data_path "/root/data/cpsc2018/train.txt" \
+    --val_data_path "/root/data/cpsc2018/val.txt" \
     --data_standardization true \
     --device "cuda" \
     --batch_size 512 \

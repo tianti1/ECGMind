@@ -144,6 +144,8 @@ class MaskedAutoencoderViT(nn.Module):
         if all_encode_norm_layer != None:
             self.fc_norm = all_encode_norm_layer(embed_dim)
 
+        # 创建多个 LayerNorm 层
+        self.fc_norms = nn.ModuleList([all_encode_norm_layer(embed_dim) for _ in range(4)])  # 这里的4是你提取特征的次数
 
         # --------------------------------------------------------------------------
         # MAE decoder specifics
@@ -411,18 +413,20 @@ class MaskedAutoencoderViT(nn.Module):
         intermediate_features = []
         for i, blk in enumerate(self.blocks):
             x = blk(x)
-            # 收集最后四层的特征，这样可以更好地捕获高层语义信息
-            if i >= len(self.blocks) - 4:
-                if self.fc_norm is not None:
+            if i % (len(self.blocks) // 4) == 0:
+                if self.fc_norms[i // (len(self.blocks) // 4)] is not None:
                     feat = x[:, 1:, :].mean(dim=1)  # 移除CLS token并平均池化
+                    feat = self.fc_norms[i // (len(self.blocks) // 4)](feat)  # 使用对应的fc_norm
                 else:
                     feat = x[:, 0]  # 使用CLS token
                 intermediate_features.append(feat)
         
-        # 组合最后几层的特征
+        # 组合提取的特征
         if len(intermediate_features) > 1:
             # 使用简单平均而不是拼接，这样可以保持特征维度一致
-            outcome = torch.stack(intermediate_features).mean(dim=0)
+            outcome = torch.cat(intermediate_features, dim=-1)
+
+            # outcome = torch.stack(intermediate_features).mean(dim=0)
         else:
             outcome = intermediate_features[0]
         

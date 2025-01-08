@@ -150,7 +150,7 @@ def run_finetune(args):
     train_dataset = PhysionetDataset(args.train_data_path,args.data_standardization)
     train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=16, drop_last=True, pin_memory=False)
     val_dataset = PhysionetDataset(args.val_data_path,args.data_standardization)
-    if args.dataset_name in ['ptb-xl','ptb-xl-center']:
+    if args.dataset_name in ['ptb-xl','ptb-xl-center','cpsc2018']:
         train_dataset = PTBXLDataset(args.train_data_path, args.data_standardization)
         val_dataset = PTBXLDataset(args.val_data_path, args.data_standardization)
     else:
@@ -198,7 +198,7 @@ def run_finetune(args):
 def run_test(args):
     model = get_model(args)
 
-    if args.dataset_name in ['ptb-xl', 'ptb-xl-center']:
+    if args.dataset_name in ['ptb-xl', 'ptb-xl-center','cpsc2018']:
         test_dataset = PTBXLDataset(args.test_data_path, args.data_standardization)
     else:
         test_dataset = PhysionetDataset(args.test_data_path, args.data_standardization)

@@ -9,6 +9,7 @@ import os
 import numpy as np
 from model.segMaeEncoder import segEncoder
 from model.segMaeDecoder import segDecoder_embed 
+import numpy as np
 os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 
 class TimeSeriesWeighting(nn.Module):
@@ -24,8 +25,8 @@ class TimeSeriesWeighting(nn.Module):
 
     def forward(self, x):
         B, N, L = x.shape
-        patch_size = 30
-        num_patches=40
+        patch_size = 50
+        num_patches=50
         # 将数据转为 numpy 数组
         # self.norm(x)
         x_copy = x.detach().cpu().numpy()
@@ -68,33 +69,6 @@ class TimeSeriesWeighting(nn.Module):
         return freq_domain_energy
 
 
-def FFT_for_Period(x,device):
-        
-        B, N, L=x.shape
-        import numpy as np
-        # freq_domain_energy = np.zeros((B, N))
-        # 将数据转移到CPU上以进行numpy操作
-        x_cpu = x.detach().cpu().numpy()
-
-        # 初始化频域能量矩阵
-        freq_domain_energy = np.zeros((B, N))
-
-        # 进行傅立叶变换并计算频域能量
-        ft_patch = np.fft.fft(x_cpu, axis=-1)
-        freq_domain_energy = np.sum(np.abs(ft_patch) ** 2, axis=-1)
-        # Normalize freq_domain_energy to range [0, 1]
-        min_val = np.min(freq_domain_energy)
-        max_val = np.max(freq_domain_energy)
-        freq_domain_energy = (freq_domain_energy - min_val) / (max_val - min_val)
-
-        # Optionally transfer the normalized result back to the specified device
-        freq_domain_energy = torch.tensor(freq_domain_energy).to(device)
-
-
-        return freq_domain_energy
-       
-
-
 class patchEmbed(nn.Module):
 
     def __init__(self,sig_length=2400,patch_length=48):
@@ -109,17 +83,10 @@ class patchEmbed(nn.Module):
     def forward(self,x):
         B, C, L = x.shape
         assert L == self.sig_length, 'signal length does not match.'
-        # num_patch = (max(L, self.patch_length) - self.patch_length) // self.stribe + 1
-        # tgt_len=self.patch_length+self.stribe*(num_patch-1)
-        # s_begin=L-tgt_len
-        # x = x[:, :, s_begin:]  # 截取输入序列的末尾部分
         x_patch = x.unfold(dimension=2, size=self.patch_length, step=self.stribe)  # 将输入数据转换为补丁形式
         x_patch = x_patch.permute(0, 2, 1, 3)  # 调整维度顺序以匹配预期的形状 [bs x num_patch x n_vars x patch_len]
         x_patch=x_patch.squeeze(-2)
-        # x_patch=self.norm(x_patch)
-        # Merge patch dimension with channel dimension
-        # x_patch = x_patch.view(B, self.num_patches, -1)
-        
+
         # Normalize the patches，必须
         x_patch = self.norm(x_patch)
         return x_patch
@@ -187,35 +154,16 @@ class MaskedAutoencoderViT(nn.Module):
         
         self.norm = norm_layer(embed_dim)
         
-
-        # 定义可训练的权重参数
-        # self.weight = nn.Parameter(torch.tensor(1.0))
-        # self.fftWeight=
-
         # 定义可训练的权重参数
         self.fftWeight = nn.Parameter(torch.empty(1))
-        # # # 使用正态分布初始化权重参数
-        # torch.nn.init.normal_(self.weight, mean=0.0, std=0.02)
-        # import torch.distributions as dist
-        # normal_dist = dist.Normal(0, 1)
-        # weight_value = normal_dist.sample()
-        # self.fftWeight= nn.Parameter(torch.sigmoid(weight_value))
         self.fc_norm = None
-        # if all_encode_norm_layer != None:
-        #     self.fc_norm = all_encode_norm_layer(embed_dim)
         self.all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6)
         if self.all_encode_norm_layer != None:
-            # self.fc_norm =all_encode_norm_layer(embed_dim)
-            # self.fc_norm1 = all_encode_norm_layer(embed_dim//win_split)
-            # self.fc_norm2 = all_encode_norm_layer(embed_dim//(win_split*2))
-            # self.fc_norm3 = all_encode_norm_layer(embed_dim//(win_split*4))
-            # self.fc_norm4 = all_encode_norm_layer(embed_dim//(win_split*8))
             self.fc_norm =self.all_encode_norm_layer(embed_dim)
-            # self.fc_norm1 = self.all_encode_norm_layer(embed_dim)
-            self.fc_norm11 = self.all_encode_norm_layer(256)
-            self.fc_norm22 = self.all_encode_norm_layer(128)
-            self.fc_norm33 = self.all_encode_norm_layer(64)
-            self.fc_norm44 = self.all_encode_norm_layer(32)
+            self.fc_norm1 = self.all_encode_norm_layer(256)
+            self.fc_norm2 = self.all_encode_norm_layer(128)
+            self.fc_norm3 = self.all_encode_norm_layer(64)
+            self.fc_norm4 = self.all_encode_norm_layer(32)
 
         # --------------------------------------------------------------------------
         # MAE decoder specifics
@@ -252,22 +200,9 @@ class MaskedAutoencoderViT(nn.Module):
         decoder_pos_embed = get_1d_sincos_pos_embed(self.decoder_pos_embed.shape[-1], int(self.patch_embed.num_patches), cls_token=True)
         self.decoder_pos_embed.data.copy_(torch.from_numpy(decoder_pos_embed).float().unsqueeze(0))
 
-        # initialize patch_embed like nn.Linear (instead of nn.Conv2d)
-        # w = self.patch_embed.proj.weight.data
-        # torch.nn.init.xavier_uniform_(w.view([w.shape[0], -1]))
-
-        # timm's trunc_normal_(std=.02) is effectively normal_(std=0.02) as cutoff is too big (2.)
         torch.nn.init.normal_(self.cls_token, std=.02)
         torch.nn.init.normal_(self.mask_token, std=.02)
         torch.nn.init.normal_(self.fftWeight,std=.02)
-
-         # 生成标准正态分布的值
-        # import torch.distributions as dist
-        # normal_dist = dist.Normal(0, 1)
-        # weight_value = normal_dist.sample()
-        # # 使用累积分布函数将其转换到 [0, 1] 区间
-        # self.weight = torch.sigmoid(weight_value)
-
         # initialize nn.Linear and nn.LayerNorm
         self.apply(self._init_weights)
 
@@ -339,61 +274,6 @@ class MaskedAutoencoderViT(nn.Module):
 
         return x_masked, mask, ids_restore
     
-    def visualize_masked_data(self,x, mask,freq_domain_energy):
-        import matplotlib.pyplot as plt
-        N, L, D = x.shape
-
-        for i in range(N):
-            masked_x = x[i].clone()
-            origin_x = x[i].clone()
-            origin_x=origin_x.cpu().detach().numpy()
-            origin_x=origin_x.flatten()
-            plt.figure(figsize=(20, 5))
-              # 在图中添加频域能量标签
-            for j, energy in enumerate(freq_domain_energy[i]):
-                plt.text(j * 30, origin_x[j * 30], f'{energy:.2f}', fontsize=10, verticalalignment='bottom', horizontalalignment='center')
-            plt.plot(range(len(origin_x)), origin_x, linewidth=2, marker=None, linestyle='-')
-            plt.title(f'data for sample {i}')
-            plt.savefig(f'data_sample_{i}.png')  # 保存图像到文件
-            # 将被掩盖的部分设置为黑色 (0)
-            masked_indices = torch.where(mask[i] == 1)
-            masked_x[masked_indices] = 0
-            masked_x=masked_x.flatten()
-            masked_x=masked_x.cpu().detach().numpy()
-            # 绘制每个样本的掩盖图像
-            plt.figure(figsize=(15, 5))
-             # 设置图形的大小
-            plt.plot(range(len(masked_x)), masked_x, linewidth=2, marker=None, linestyle='-')
-            # mid = len(signal) // 2
-            # plt.imshow(masked_x.cpu().detach().numpy(), cmap='gray', aspect='auto')
-            plt.title(f'Masked data for sample {i}')
-            plt.show()
-            plt.savefig(f'masked_data_sample_{i}.png')  # 保存图像到文件
-            plt.close()
-    
-     
-    def mask_last_quarter(self, x):
-        """
-        Mask the last quarter of the sequence.
-        x: [N, L, D], sequence
-        """
-        N, L, D = x.shape  # batch, length, dim
-        len_keep = int(L * 3 / 4)  # keep the first 3/4, mask the last 1/4
-        
-        # Generate the mask: 0 is keep, 1 is remove (for the last 1/4)
-        mask = torch.ones([N, L], device=x.device)
-        mask[:, :len_keep] = 0  # 前 3/4 保留，最后 1/4 置为 1
-        
-        # Apply the mask by keeping the first 3/4 and setting the last 1/4 to 0
-        x_masked = x.clone()
-        x_masked[:, len_keep:, :] = 0  # 遮盖最后 1/4
-
-        # ids_restore is just a simple range here, as we aren't shuffling
-        ids_restore = torch.arange(L, device=x.device).unsqueeze(0).repeat(N, 1)
-
-        return x_masked, mask, ids_restore
-    
-
     def random_masking(self, x, mask_ratio):
         """
         Perform per-sample random masking by per-sample shuffling.
@@ -577,132 +457,6 @@ class MaskedAutoencoderViT(nn.Module):
         return mask,freq
 
 
-
-def mae_vit_base_patch16_dec512d8b(**kwargs):
-    model = MaskedAutoencoderViT(
-        patch_size=25, embed_dim=768, depth=12, num_heads=12,
-        decoder_embed_dim=512, decoder_depth=8, decoder_num_heads=16,
-        mlp_ratio=4, norm_layer=partial(nn.LayerNorm, eps=1e-6), all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
-    return model
-
-
-def mae_vit_large_patch16_dec512d8b(**kwargs):
-    model = MaskedAutoencoderViT(
-        patch_size=16, embed_dim=1024, depth=24, num_heads=16,
-        decoder_embed_dim=512, decoder_depth=8, decoder_num_heads=16,
-        mlp_ratio=4, norm_layer=partial(nn.LayerNorm, eps=1e-6), all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
-    return model
-
-
-def mae_vit_huge_patch14_dec512d8b(**kwargs):
-    model = MaskedAutoencoderViT(
-        patch_size=14, embed_dim=1280, depth=32, num_heads=16,
-        decoder_embed_dim=512, decoder_depth=8, decoder_num_heads=16,
-        mlp_ratio=4, norm_layer=partial(nn.LayerNorm, eps=1e-6), all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
-    return model
-
-def mae_vit_signal_patch40_enc40_dec20d8b(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=40,embed_dim=40,depth=12,num_heads=10,
-        decoder_embed_dim=20,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6), all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch12_enc12_dec6d8b(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=12,embed_dim=12,depth=12,num_heads=6,
-        decoder_embed_dim=6,decoder_depth=8,decoder_num_heads=3,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6), all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch12_enc40_dec20d8b_m75(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=12,embed_dim=40,depth=12,num_heads=10,
-        decoder_embed_dim=20,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio=0.75, all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch12_enc40_dec20d8b_m50(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=12,embed_dim=40,depth=12,num_heads=10,
-        decoder_embed_dim=20,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio = 0.50, all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch12_enc40_dec20d8b_m25(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=12,embed_dim=40,depth=12,num_heads=10,
-        decoder_embed_dim=20,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio = 0.25, all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch12_enc40_dec20d8b_m75_mean(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=12,embed_dim=40,depth=12,num_heads=10,
-        decoder_embed_dim=20,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio=0.75,mask='mean', all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch12_enc40_dec20d8b_m50_mean(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=12,embed_dim=40,depth=12,num_heads=10,
-        decoder_embed_dim=20,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio=0.5,mask='mean', all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch12_enc40_dec20d8b_m25_mean(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=12,embed_dim=40,depth=12,num_heads=10,
-        decoder_embed_dim=20,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio=0.25,mask='mean', all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch24_enc80_dec40d8b_m75(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=24,embed_dim=80,depth=12,num_heads=10,
-        decoder_embed_dim=40,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio=0.75,mask='random', all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch24_enc80_dec40d8b_m50(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=24,embed_dim=80,depth=12,num_heads=10,
-        decoder_embed_dim=40,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio=0.5,mask='random', all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch24_enc80_dec40d8b_m25(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=24,embed_dim=80,depth=12,num_heads=10,
-        decoder_embed_dim=40,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio=0.25,mask='random', all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch48_enc160_dec80d8b_m75(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=48,embed_dim=160,depth=12,num_heads=10,
-        decoder_embed_dim=80,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio=0.75,mask='random', all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch48_enc160_dec80d8b_m50(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=48,embed_dim=160,depth=12,num_heads=10,
-        decoder_embed_dim=80,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio=0.5,mask='random', all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs
-    )
-    return model
-def mae_vit_signal_patch48_enc160_dec80d8b_m25(**kwargs):
-    model = MaskedAutoencoderViT(
-        img_size = 2400,patch_size=48,embed_dim=160,depth=12,num_heads=10,
-        decoder_embed_dim=80,decoder_depth=8,decoder_num_heads=10,
-        mlp_ratio=2, norm_layer=partial(nn.LayerNorm, eps=1e-6),mask_ratio=0.25,mask='random', all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6),  **kwargs
-    )
-    return model
-
-
-
-
 def mae_prefer_custom(args):
     if args.norm_layer == 'LayerNorm':
         norm_layer = partial(nn.LayerNorm, eps=1e-6)
@@ -714,24 +468,3 @@ def mae_prefer_custom(args):
         mlp_ratio=args.mlp_ratio, norm_layer=norm_layer,mask_ratio=args.mask_ratio,mask=args.mask_type, all_encode_norm_layer=all_encode_norm_layer,win_split=2
     )
     return model
-
-
-
-# set recommended archs
-mae_vit_base_patch16 = mae_vit_base_patch16_dec512d8b  # decoder: 512 dim, 8 blocks
-mae_vit_large_patch16 = mae_vit_large_patch16_dec512d8b  # decoder: 512 dim, 8 blocks
-mae_vit_huge_patch14 = mae_vit_huge_patch14_dec512d8b  # decoder: 512 dim, 8 blocks
-mae_vit_signal_patch40 = mae_vit_signal_patch40_enc40_dec20d8b # decoder : 20dim, 8 blocks
-mae_vit_signal_patch12 = mae_vit_signal_patch12_enc12_dec6d8b # decoder : 6dim, 8 blocks
-mae_vit_signal_patch12_mask75 = mae_vit_signal_patch12_enc40_dec20d8b_m75 # decoder : 6dim, 8 blocks
-mae_vit_signal_patch12_mask50 = mae_vit_signal_patch12_enc40_dec20d8b_m50 # decoder : 6dim, 8 blocks
-mae_vit_signal_patch12_mask25 = mae_vit_signal_patch12_enc40_dec20d8b_m25 # decoder : 6dim, 8 blocks
-mae_vit_signal_patch12_mask75_mean = mae_vit_signal_patch12_enc40_dec20d8b_m75_mean # decoder : 6dim, 8 blocks
-mae_vit_signal_patch12_mask50_mean = mae_vit_signal_patch12_enc40_dec20d8b_m50_mean # decoder : 6dim, 8 blocks
-mae_vit_signal_patch12_mask25_mean = mae_vit_signal_patch12_enc40_dec20d8b_m25_mean # decoder : 6dim, 8 blocks
-mae_vit_signal_patch24_mask75 = mae_vit_signal_patch24_enc80_dec40d8b_m75 # decoder : 6dim, 8 blocks
-mae_vit_signal_patch24_mask50 = mae_vit_signal_patch24_enc80_dec40d8b_m50 # decoder : 6dim, 8 blocks
-mae_vit_signal_patch24_mask25 = mae_vit_signal_patch24_enc80_dec40d8b_m25 # decoder : 6dim, 8 blocks
-mae_vit_signal_patch48_mask75 = mae_vit_signal_patch48_enc160_dec80d8b_m75 # decoder : 6dim, 8 blocks
-mae_vit_signal_patch48_mask50 = mae_vit_signal_patch48_enc160_dec80d8b_m50 # decoder : 6dim, 8 blocks
-mae_vit_signal_patch48_mask25 = mae_vit_signal_patch48_enc160_dec80d8b_m25 # decoder : 6dim, 8 blocks
