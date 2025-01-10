@@ -32,7 +32,7 @@ class MlpHeadV1(ClassifierHead):
             nn.Dropout(0.5),
             
             # 输出层
-            nn.Linear(pretrain_out_dim // 2, class_n)
+            nn.Linear(pretrain_out_dim, class_n)
         )
         
         # 添加初始化

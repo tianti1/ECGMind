@@ -2,3 +2,4 @@ tmp.log
 __pycache__/
 ST-MEM/
 ckpt/
+ckpt

@@ -6,22 +6,21 @@ export PYTHONPATH=$(pwd)
 # 运行预训练脚本
 
 python main.py \
-    --task "finetune" \
+    --task "test" \
     --dataset_name "cpsc2018" \
-    --train_data_path "/root/data/cpsc2018/train.txt" \
-    --val_data_path "/root/data/cpsc2018/val.txt" \
+    --test_data_path "/root/data/cpsc2018/test.txt" \
     --data_standardization true \
     --device "cuda" \
-    --batch_size 512 \
+    --batch_size 32 \
     --max_epoch_num 1000 \
     --early_stop_patience 30 \
-    --learning_rate 1e-4 \
+    --learning_rate 1e-3 \
     --weight_decay 1e-3 \
     --scheduler_patience 20 \
     --scheduler_factor 0.8 \
     --scheduler_min_lr 1e-8 \
-    --pretrain_model_freeze true \
-    --ckpt_path "/root/ecg_ai/FocusECG/FocusECG/ckpt/pre_train/icentiallk-p01/FocusMae/202501070232/min_val_loss=23.90247344970703.pth" \
+    --pretrain_model_freeze false \
+    --ckpt_path "/root/ecg_ai/FocusECG/FocusECG/ckpt/classifier/cpsc2018/FocusMae/202501081926/max_f1=0.9541641484904382.pth" \
     --classifier_head_name "mlp_v1" \
     --class_n 9 \
     --model_name "FocusMae" \

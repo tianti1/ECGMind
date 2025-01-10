@@ -8,7 +8,7 @@ import model.FocusMergeMae as model_focusmerge_mae
 import model.PatchTST as model_patchtst
 import model.PatchTSMixer as model_patchtsmixer
 from tqdm import tqdm
-from dataset import PhysionetDataset, PTBXLDataset
+from dataset import PhysionetDataset
 from datetime import datetime
 from sklearn.metrics import precision_recall_fscore_support
 from sklearn.metrics import classification_report 
@@ -147,16 +147,9 @@ def run_finetune(args):
 
     # make data
 
-    train_dataset = PhysionetDataset(args.train_data_path,args.data_standardization)
-    train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=16, drop_last=True, pin_memory=False)
-    val_dataset = PhysionetDataset(args.val_data_path,args.data_standardization)
-    if args.dataset_name in ['ptb-xl','ptb-xl-center','cpsc2018']:
-        train_dataset = PTBXLDataset(args.train_data_path, args.data_standardization)
-        val_dataset = PTBXLDataset(args.val_data_path, args.data_standardization)
-    else:
-        train_dataset = PhysionetDataset(args.train_data_path, args.data_standardization)
-        val_dataset = PhysionetDataset(args.val_data_path, args.data_standardization)
-    
+
+    train_dataset = PhysionetDataset(args.train_data_path, args.data_standardization, args.dataset_name)
+    val_dataset = PhysionetDataset(args.val_data_path, args.data_standardization, args.dataset_name)
     train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=16, drop_last=True, pin_memory=False)
     val_dataloader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=True, num_workers=16, drop_last=True, pin_memory=False)
     
@@ -198,11 +191,7 @@ def run_finetune(args):
 def run_test(args):
     model = get_model(args)
 
-    if args.dataset_name in ['ptb-xl', 'ptb-xl-center','cpsc2018']:
-        test_dataset = PTBXLDataset(args.test_data_path, args.data_standardization)
-    else:
-        test_dataset = PhysionetDataset(args.test_data_path, args.data_standardization)
-        
+    test_dataset = PhysionetDataset(args.test_data_path, args.data_standardization, args.dataset_name)
     test_dataloader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True, num_workers=16, drop_last=True, pin_memory=False)
 
     all_loss, micro_f1, macro_p, macro_r, macro_f1, auroc = infer(model, test_dataloader, "testing", args.device)
