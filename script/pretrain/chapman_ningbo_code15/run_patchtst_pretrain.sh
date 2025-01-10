@@ -7,9 +7,9 @@ export PYTHONPATH=$(pwd)
 
 python main.py \
     --task "pretrain" \
-    --dataset_name "icentiallk-p01" \
-    --train_data_path "/root/data/p0-1_10s/index_0-42k_step:1.txt" \
-    --val_data_path "/root/data/p0-1_10s/index_42-60k_step:1.txt" \
+    --dataset_name "chapman_ningbo_code15" \
+    --train_data_path "/root/data/FocusMAE/train.txt" \
+    --val_data_path "/root/data/FocusMAE/val.txt" \
     --data_standardization true \
     --device "cuda" \
     --batch_size 512 \
@@ -24,8 +24,8 @@ python main.py \
     --model_name "PatchTST" \
     --num_input_channels 1 \
     --signal_length 2500 \
-    --patch_length 30 \
-    --patch_stride 30 \
+    --patch_length 50 \
+    --patch_stride 50 \
     --embed_dim 256 \
     --norm_layer 'LayerNorm' \
     --mask_ratio 0.75 \

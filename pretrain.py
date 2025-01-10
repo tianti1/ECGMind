@@ -85,17 +85,7 @@ def run_pretrain(args):
 
     step = 0
     all_loss = 0
-    # 添加epoch属性到模型
-    model.current_epoch = 0
-    
     for epoch in range(args.max_epoch_num):
-        model.current_epoch = epoch  # 更新当前epoch
-        
-        logger.info(f'epoch={epoch}')
-    
-        # 训练阶段
-        train_losses = []
-        val_losses = []
         # train
         prog_iter = tqdm(train_dataloader, desc="training", leave=False)
         for batch_idx, batch in enumerate(prog_iter):
@@ -118,21 +108,7 @@ def run_pretrain(args):
                 prog_iter = tqdm(val_dataloader, desc="validating", leave=False)
                 with torch.no_grad():
                     for batch_idx, batch in enumerate(prog_iter):
-
-                        if args.model_name == 'simclr':
-                            batch = torch.cat(batch, dim=0)
-                            batch = batch.to(args.device)
-                            logits, labels, loss = model(batch)
-                            top1, top5 = model.accuracy(logits, labels, topk=(1, 5))
-                            avg_top1 += top1[0]
-                            avg_top5 += top5[0]
-                        else:
-                            if args.model_name == 'ContraMaeTest':
-                                batch = torch.cat(batch, dim=0)
-                            batch = batch.to(args.device)
-                            loss= model.forward_loss(batch)
                         batch = batch.to(args.device)
-                        loss= model.forward_loss(batch)
                         if args.model_name == "ST-MEM":
                             loss= model.forward(batch)['loss']
                         else:
@@ -144,8 +120,3 @@ def run_pretrain(args):
                 if early_stopping.early_stop:
                     return
                 all_loss = 0
-
-# if __name__ == '__main__':
-#     args = parse_args()
-#     print(args)
-#     pre_train(args)

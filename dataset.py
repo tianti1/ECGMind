@@ -86,6 +86,7 @@ class PhysionetDataset(Dataset):
         x = torch.tensor(x.copy(), dtype=torch.float32)
 
         if "ptb-xl" in self.dataset_name:
+            x = x.unsqueeze(0)
             target = torch.tensor(self.label_map[data[1]], dtype=torch.long)
         elif "cpsc2018" in self.dataset_name:
             target = torch.tensor(self.label_map[data[1]], dtype=torch.long)
