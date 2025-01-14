@@ -3,3 +3,7 @@ __pycache__/
 ST-MEM/
 ckpt/
 ckpt
+nohup.log
+pretrain.log
+finetune.log
+test.log
