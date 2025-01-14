@@ -12,7 +12,7 @@ from dataset import PretrainDataset
 from torch.utils.data import DataLoader
 from datetime import datetime
 from util.schedule import EarlyStopping
-from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch.optim.lr_scheduler import CosineAnnealingLR
 from tqdm import tqdm
 import torch
 import pytz
@@ -73,14 +73,15 @@ def run_pretrain(args):
     early_stopping = EarlyStopping(patience=args.early_stop_patience, save_dir=ckpt_dir)
     
     # ready train
-    optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
-    scheduler = ReduceLROnPlateau(
+    optimizer = optim.AdamW(
+        model.parameters(),
+        lr=args.learning_rate,
+        weight_decay=args.weight_decay
+    )
+    scheduler = CosineAnnealingLR(
         optimizer,
-        mode='min',
-        patience=args.scheduler_patience,  # 增加patience
-        factor=args.scheduler_factor,   # 更温和的衰减
-        min_lr=args.scheduler_min_lr,
-        verbose=True  # 打印学习率变化
+        T_max=args.max_epoch_num,
+        eta_min=args.scheduler_min_lr
     )
 
     step = 0
@@ -101,7 +102,7 @@ def run_pretrain(args):
             all_loss += loss    
             step += 1
             if step % args.val_every_n_steps == 0:
-                logger.info(f'batch_iter={step // args.val_every_n_steps} train_loss={all_loss}')
+                logger.info(f'batch_iter={step // args.val_every_n_steps} train_loss={all_loss / args.val_every_n_steps * 100}')
                 all_loss = 0
                 # validate
                 model.eval()
@@ -114,8 +115,9 @@ def run_pretrain(args):
                         else:
                             loss= model.forward_loss(batch)
                         all_loss += loss
+                all_loss= all_loss / len(val_dataloader) * 100
                 logger.info(f'batch_iter={step // args.val_every_n_steps} val_loss={all_loss}')
-                scheduler.step(all_loss)
+                scheduler.step()
                 early_stopping.check(all_loss, model)
                 if early_stopping.early_stop:
                     return

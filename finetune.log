@@ -2,24 +2,51 @@
   checkpoint = torch.load(args.ckpt_path, map_location='cpu')
 cuda
 cuda
-Namespace(all_encode_norm_layer='LayerNorm', batch_size=512, ckpt_path='/root/ecg_ai/FocusECG/FocusECG/ckpt/pre_train/icentiallk-p01/FocusMae/202501070232/min_val_loss=23.90247344970703.pth', class_n=5, classifier_head_name='mlp_v1', data_standardization=True, dataset_name='ptb-xl', decoder_depth=8, decoder_embed_dim=64, decoder_num_heads=8, device=device(type='cuda'), early_stop_patience=30, embed_dim=256, encoder_depth=48, encoder_num_heads=16, learning_rate=0.0001, mask_ratio=0.75, mask_type='period', max_epoch_num=1000, mlp_ratio=2, model_name='FocusMae', norm_layer='LayerNorm', num_input_channels=1, num_layers=48, patch_length=50, patch_size=50, patch_stride=50, pretrain_model_freeze=True, scheduler_factor=0.8, scheduler_min_lr=1e-08, scheduler_patience=20, self_attn=True, self_attn_heads=16, signal_length=2500, task='finetune', test_data_path='/root/data/p1-2_people2000_segmentall_sample_step100_data/index_60-80k_step:1.txt', train_data_path='/root/data/ptb-xl/train.txt', use_cls_token=True, use_positional_encoding=True, val_data_path='/root/data/ptb-xl/val.txt', val_every_n_steps=40, weight_decay=0.001)
-training:   0%|          | 0/22 [00:00<?, ?it/s]                                                Traceback (most recent call last):
-  File "main.py", line 78, in <module>
-    run_finetune(args)
-  File "/root/ecg_ai/FocusECG/FocusECG/finetune_test.py", line 174, in run_finetune
-    pred = model(input_x)
-  File "/root/miniconda3/envs/ecg/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/root/miniconda3/envs/ecg/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/root/ecg_ai/FocusECG/FocusECG/model/classifier.py", line 78, in forward
-    embedding = self.pre_train_model.forward_feature(x)
-  File "/root/ecg_ai/FocusECG/FocusECG/model/FocusMae.py", line 306, in forward_feature
-    x = self.patch_embed(x)
-  File "/root/miniconda3/envs/ecg/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/root/miniconda3/envs/ecg/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/root/ecg_ai/FocusECG/FocusECG/model/FocusMae.py", line 73, in forward
-    B, C, L = x.shape
-ValueError: not enough values to unpack (expected 3, got 2)
+Namespace(all_encode_norm_layer='LayerNorm', batch_size=512, ckpt_path='/root/ecg_ai/FocusECG/FocusECG/ckpt/pre_train/chapman_ningbo_code15/FocusMae/202501121549/min_val_loss=34.15449523925781.pth', class_n=5, classifier_head_name='mlp_v1', data_standardization=True, dataset_name='ptb-xl', decoder_depth=4, decoder_embed_dim=256, decoder_num_heads=4, device=device(type='cuda'), early_stop_patience=30, embed_dim=768, encoder_depth=12, encoder_num_heads=12, learning_rate=0.001, mask_ratio=0.75, mask_type='period', max_epoch_num=1000, mlp_ratio=4, model_name='FocusMae', norm_layer='LayerNorm', num_input_channels=1, num_layers=12, patch_length=75, patch_size=75, patch_stride=75, pretrain_model_freeze=False, scheduler_factor=0.8, scheduler_min_lr=1e-08, scheduler_patience=20, self_attn=True, self_attn_heads=12, signal_length=2250, task='finetune', test_data_path='/root/data/ptb-xl/test.txt', train_data_path='/root/data/ptb-xl/train.txt', use_cls_token=True, use_positional_encoding=True, val_data_path='/root/data/ptb-xl/val.txt', val_every_n_steps=40, weight_decay=0.001)
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:03<01:04,  3.06s/it]training:   9%|▉         | 2/22 [00:04<00:39,  1.96s/it]training:  14%|█▎        | 3/22 [00:05<00:29,  1.56s/it]training:  18%|█▊        | 4/22 [00:05<00:20,  1.16s/it]training:  23%|██▎       | 5/22 [00:06<00:17,  1.05s/it]training:  27%|██▋       | 6/22 [00:07<00:17,  1.12s/it]training:  32%|███▏      | 7/22 [00:08<00:14,  1.00it/s]training:  36%|███▋      | 8/22 [00:09<00:11,  1.18it/s]training:  41%|████      | 9/22 [00:10<00:12,  1.04it/s]training:  45%|████▌     | 10/22 [00:11<00:12,  1.04s/it]training:  50%|█████     | 11/22 [00:12<00:12,  1.10s/it]training:  55%|█████▍    | 12/22 [00:14<00:12,  1.26s/it]training:  59%|█████▉    | 13/22 [00:16<00:12,  1.40s/it]training:  64%|██████▎   | 14/22 [00:18<00:14,  1.77s/it]training:  68%|██████▊   | 15/22 [00:21<00:14,  2.02s/it]training:  73%|███████▎  | 16/22 [00:23<00:12,  2.09s/it]training:  77%|███████▋  | 17/22 [00:26<00:11,  2.27s/it]training:  82%|████████▏ | 18/22 [00:28<00:09,  2.25s/it]training:  86%|████████▋ | 19/22 [00:31<00:07,  2.35s/it]training:  91%|█████████ | 20/22 [00:33<00:04,  2.42s/it]training:  95%|█████████▌| 21/22 [00:36<00:02,  2.47s/it]training: 100%|██████████| 22/22 [00:39<00:00,  2.51s/it]                                                         30.562047243118286
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:07,  1.55s/it]validating:  33%|███▎      | 2/6 [00:02<00:04,  1.10s/it]validating:  50%|█████     | 3/6 [00:03<00:02,  1.05it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.12it/s]validating:  83%|████████▎ | 5/6 [00:04<00:00,  1.18it/s]validating: 100%|██████████| 6/6 [00:05<00:00,  1.21it/s]                                                         /root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+              precision    recall  f1-score   support
+
+           0       1.00      0.02      0.03       308
+           1       0.00      0.00      0.00       106
+           2       0.00      0.00      0.00       510
+           3       0.55      1.00      0.71      1687
+           4       0.00      0.00      0.00       461
+
+    accuracy                           0.55      3072
+   macro avg       0.31      0.20      0.15      3072
+weighted avg       0.40      0.55      0.39      3072
+
+accuracy = 0.55078125, macro_p = 0.3100097815454842, macro_r = 0.20324675324675323, macro_f1 = 0.14833340277768442, AUROC = 0.7057590393504152
+min_loss:None, max_f1:None, val_loss:8.091513633728027, val_f1:0.7057590393504152
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:03<01:04,  3.08s/it]training:   9%|▉         | 2/22 [00:05<00:56,  2.85s/it]training:  14%|█▎        | 3/22 [00:07<00:48,  2.56s/it]training:  18%|█▊        | 4/22 [00:10<00:46,  2.57s/it]training:  23%|██▎       | 5/22 [00:13<00:43,  2.58s/it]training:  27%|██▋       | 6/22 [00:15<00:41,  2.58s/it]training:  32%|███▏      | 7/22 [00:18<00:38,  2.58s/it]training:  36%|███▋      | 8/22 [00:20<00:36,  2.59s/it]training:  41%|████      | 9/22 [00:23<00:33,  2.58s/it]training:  45%|████▌     | 10/22 [00:26<00:31,  2.59s/it]training:  50%|█████     | 11/22 [00:28<00:27,  2.49s/it]training:  55%|█████▍    | 12/22 [00:31<00:25,  2.55s/it]training:  59%|█████▉    | 13/22 [00:33<00:22,  2.47s/it]training:  64%|██████▎   | 14/22 [00:35<00:19,  2.49s/it]training:  68%|██████▊   | 15/22 [00:38<00:17,  2.52s/it]training:  73%|███████▎  | 16/22 [00:41<00:15,  2.54s/it]training:  77%|███████▋  | 17/22 [00:43<00:12,  2.55s/it]training:  82%|████████▏ | 18/22 [00:46<00:10,  2.56s/it]training:  86%|████████▋ | 19/22 [00:48<00:07,  2.57s/it]training:  91%|█████████ | 20/22 [00:51<00:05,  2.57s/it]training:  95%|█████████▌| 21/22 [00:53<00:02,  2.48s/it]training: 100%|██████████| 22/22 [00:56<00:00,  2.50s/it]                                                         23.76250821352005
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:07,  1.42s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.10it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.35it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.51it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.58it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.65it/s]                                                         /root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+              precision    recall  f1-score   support
+
+           0       0.79      0.38      0.51       310
+           1       0.00      0.00      0.00       103
+           2       0.37      0.34      0.35       506
+           3       0.66      0.96      0.78      1688
+           4       0.00      0.00      0.00       465
+
+    accuracy                           0.62      3072
+   macro avg       0.36      0.34      0.33      3072
+weighted avg       0.50      0.62      0.54      3072
+
+accuracy = 0.6217447916666666, macro_p = 0.3628503069258956, macro_r = 0.33580644557014344, macro_f1 = 0.329381304562831, AUROC = 0.7240875347546969
+min_loss:8.091513633728027, max_f1:0.7057590393504152, val_loss:6.675095558166504, val_f1:0.7240875347546969
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:54,  2.59s/it]training:   9%|▉         | 2/22 [00:04<00:43,  2.16s/it]training:  14%|█▎        | 3/22 [00:06<00:38,  2.02s/it]Killed

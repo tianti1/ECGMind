@@ -1,0 +1,543 @@
+/root/ecg_ai/FocusECG/FocusECG/finetune_test.py:119: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(args.ckpt_path, map_location='cpu')
+cuda
+cuda
+Namespace(all_encode_norm_layer='LayerNorm', batch_size=512, ckpt_path='/root/ecg_ai/FocusECG/FocusECG/ckpt/pre_train/chapman_ningbo_code15/FocusMae/202501121549/min_val_loss=34.15449523925781.pth', class_n=5, classifier_head_name='mlp_v1', data_standardization=True, dataset_name='ptb-xl', decoder_depth=4, decoder_embed_dim=256, decoder_num_heads=4, device=device(type='cuda'), early_stop_patience=30, embed_dim=768, encoder_depth=12, encoder_num_heads=12, learning_rate=0.001, mask_ratio=0.75, mask_type='period', max_epoch_num=1000, mlp_ratio=4, model_name='FocusMae', norm_layer='LayerNorm', num_input_channels=1, num_layers=12, patch_length=75, patch_size=75, patch_stride=75, pretrain_model_freeze=False, scheduler_factor=0.8, scheduler_min_lr=1e-08, scheduler_patience=20, self_attn=True, self_attn_heads=12, signal_length=2250, task='finetune', test_data_path='/root/data/ptb-xl/test.txt', train_data_path='/root/data/ptb-xl/train.txt', use_cls_token=True, use_positional_encoding=True, val_data_path='/root/data/ptb-xl/val.txt', val_every_n_steps=40, weight_decay=0.001)
+freeze
+0
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:37,  1.78s/it]training:   9%|▉         | 2/22 [00:02<00:21,  1.10s/it]training:  14%|█▎        | 3/22 [00:03<00:17,  1.12it/s]training:  18%|█▊        | 4/22 [00:03<00:14,  1.25it/s]training:  23%|██▎       | 5/22 [00:04<00:12,  1.34it/s]training:  27%|██▋       | 6/22 [00:04<00:11,  1.41it/s]training:  32%|███▏      | 7/22 [00:05<00:09,  1.53it/s]training:  36%|███▋      | 8/22 [00:06<00:09,  1.53it/s]training:  41%|████      | 9/22 [00:06<00:08,  1.53it/s]training:  45%|████▌     | 10/22 [00:07<00:07,  1.53it/s]training:  50%|█████     | 11/22 [00:08<00:07,  1.53it/s]training:  55%|█████▍    | 12/22 [00:08<00:06,  1.55it/s]training:  59%|█████▉    | 13/22 [00:09<00:05,  1.62it/s]training:  64%|██████▎   | 14/22 [00:09<00:05,  1.59it/s]training:  68%|██████▊   | 15/22 [00:10<00:04,  1.57it/s]training:  73%|███████▎  | 16/22 [00:11<00:03,  1.56it/s]training:  77%|███████▋  | 17/22 [00:11<00:03,  1.55it/s]training:  82%|████████▏ | 18/22 [00:12<00:02,  1.55it/s]training:  86%|████████▋ | 19/22 [00:13<00:01,  1.63it/s]training:  91%|█████████ | 20/22 [00:13<00:01,  1.61it/s]training:  95%|█████████▌| 21/22 [00:14<00:00,  1.61it/s]training: 100%|██████████| 22/22 [00:14<00:00,  1.66it/s]                                                         30.511845469474792
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.37s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.13it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.33it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.47it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.56it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.60it/s]                                                         /root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+/root/miniconda3/envs/ecg/lib/python3.8/site-packages/sklearn/metrics/_classification.py:1471: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+              precision    recall  f1-score   support
+
+           0       0.77      0.39      0.52       308
+           1       0.00      0.00      0.00       106
+           2       0.45      0.16      0.24       510
+           3       0.73      0.92      0.82      1687
+           4       0.44      0.60      0.51       461
+
+    accuracy                           0.66      3072
+   macro avg       0.48      0.41      0.42      3072
+weighted avg       0.62      0.66      0.62      3072
+
+accuracy = 0.6595052083333334, macro_p = 0.4794273309288967, macro_r = 0.41335608968223597, macro_f1 = 0.4161635505101032, AUROC = 0.7756142848127351
+min_loss:None, max_f1:None, val_loss:5.977972984313965, val_f1:0.7756142848127351
+freeze
+1
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:29,  1.39s/it]training:   9%|▉         | 2/22 [00:02<00:19,  1.05it/s]training:  14%|█▎        | 3/22 [00:02<00:14,  1.31it/s]training:  18%|█▊        | 4/22 [00:03<00:12,  1.39it/s]training:  23%|██▎       | 5/22 [00:03<00:11,  1.43it/s]training:  27%|██▋       | 6/22 [00:04<00:10,  1.47it/s]training:  32%|███▏      | 7/22 [00:05<00:09,  1.58it/s]training:  36%|███▋      | 8/22 [00:05<00:08,  1.56it/s]training:  41%|████      | 9/22 [00:06<00:08,  1.61it/s]training:  45%|████▌     | 10/22 [00:06<00:07,  1.62it/s]training:  50%|█████     | 11/22 [00:07<00:06,  1.59it/s]training:  55%|█████▍    | 12/22 [00:08<00:06,  1.62it/s]training:  59%|█████▉    | 13/22 [00:08<00:05,  1.64it/s]training:  64%|██████▎   | 14/22 [00:09<00:04,  1.61it/s]training:  68%|██████▊   | 15/22 [00:09<00:04,  1.68it/s]training:  73%|███████▎  | 16/22 [00:10<00:03,  1.63it/s]training:  77%|███████▋  | 17/22 [00:11<00:03,  1.61it/s]training:  82%|████████▏ | 18/22 [00:11<00:02,  1.67it/s]training:  86%|████████▋ | 19/22 [00:12<00:01,  1.63it/s]training:  91%|█████████ | 20/22 [00:12<00:01,  1.69it/s]training:  95%|█████████▌| 21/22 [00:13<00:00,  1.64it/s]training: 100%|██████████| 22/22 [00:14<00:00,  1.62it/s]                                                         25.604533433914185
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.38s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.13it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.35it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.46it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.58it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.63it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.69      0.47      0.56       310
+           1       0.43      0.03      0.05       103
+           2       0.49      0.12      0.19       506
+           3       0.75      0.91      0.82      1688
+           4       0.46      0.66      0.54       465
+
+    accuracy                           0.67      3072
+   macro avg       0.56      0.44      0.43      3072
+weighted avg       0.64      0.67      0.62      3072
+
+accuracy = 0.6686197916666666, macro_p = 0.5617404908748576, macro_r = 0.4381849081832083, macro_f1 = 0.4339051747074721, AUROC = 0.7850076642256134
+min_loss:5.977972984313965, max_f1:0.7756142848127351, val_loss:5.644357681274414, val_f1:0.7850076642256134
+freeze
+2
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:29,  1.41s/it]training:   9%|▉         | 2/22 [00:02<00:19,  1.04it/s]training:  14%|█▎        | 3/22 [00:02<00:15,  1.22it/s]training:  18%|█▊        | 4/22 [00:03<00:13,  1.33it/s]training:  23%|██▎       | 5/22 [00:03<00:11,  1.48it/s]training:  27%|██▋       | 6/22 [00:04<00:10,  1.50it/s]training:  32%|███▏      | 7/22 [00:05<00:09,  1.60it/s]training:  36%|███▋      | 8/22 [00:05<00:08,  1.58it/s]training:  41%|████      | 9/22 [00:06<00:08,  1.57it/s]training:  45%|████▌     | 10/22 [00:07<00:07,  1.56it/s]training:  50%|█████     | 11/22 [00:07<00:06,  1.64it/s]training:  55%|█████▍    | 12/22 [00:08<00:06,  1.61it/s]training:  59%|█████▉    | 13/22 [00:08<00:05,  1.59it/s]training:  64%|██████▎   | 14/22 [00:09<00:04,  1.66it/s]training:  68%|██████▊   | 15/22 [00:10<00:04,  1.63it/s]training:  73%|███████▎  | 16/22 [00:10<00:03,  1.60it/s]training:  77%|███████▋  | 17/22 [00:11<00:03,  1.58it/s]training:  82%|████████▏ | 18/22 [00:11<00:02,  1.64it/s]training:  86%|████████▋ | 19/22 [00:12<00:01,  1.62it/s]training:  91%|█████████ | 20/22 [00:13<00:01,  1.60it/s]training:  95%|█████████▌| 21/22 [00:13<00:00,  1.70it/s]training: 100%|██████████| 22/22 [00:14<00:00,  1.74it/s]                                                         24.12885981798172
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.32s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.16it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.40it/s]validating:  67%|██████▋   | 4/6 [00:02<00:01,  1.55it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.65it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.71it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.70      0.47      0.56       305
+           1       0.20      0.01      0.02       102
+           2       0.50      0.13      0.21       494
+           3       0.75      0.90      0.82      1711
+           4       0.46      0.68      0.55       460
+
+    accuracy                           0.67      3072
+   macro avg       0.52      0.44      0.43      3072
+weighted avg       0.64      0.67      0.63      3072
+
+accuracy = 0.6731770833333334, macro_p = 0.5216246731422182, macro_r = 0.43875011862099456, macro_f1 = 0.4318687792242848, AUROC = 0.7920385708579583
+min_loss:5.644357681274414, max_f1:0.7850076642256134, val_loss:5.569344520568848, val_f1:0.7920385708579583
+freeze
+3
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:29,  1.43s/it]training:   9%|▉         | 2/22 [00:02<00:19,  1.03it/s]training:  14%|█▎        | 3/22 [00:02<00:14,  1.28it/s]training:  18%|█▊        | 4/22 [00:03<00:13,  1.38it/s]training:  23%|██▎       | 5/22 [00:03<00:11,  1.52it/s]training:  27%|██▋       | 6/22 [00:04<00:10,  1.54it/s]training:  32%|███▏      | 7/22 [00:04<00:09,  1.62it/s]training:  36%|███▋      | 8/22 [00:05<00:08,  1.60it/s]training:  41%|████      | 9/22 [00:06<00:07,  1.67it/s]training:  45%|████▌     | 10/22 [00:06<00:07,  1.63it/s]training:  50%|█████     | 11/22 [00:07<00:06,  1.69it/s]training:  55%|█████▍    | 12/22 [00:08<00:06,  1.64it/s]training:  59%|█████▉    | 13/22 [00:08<00:05,  1.70it/s]training:  64%|██████▎   | 14/22 [00:09<00:04,  1.65it/s]training:  68%|██████▊   | 15/22 [00:09<00:04,  1.62it/s]training:  73%|███████▎  | 16/22 [00:10<00:03,  1.68it/s]training:  77%|███████▋  | 17/22 [00:11<00:03,  1.65it/s]training:  82%|████████▏ | 18/22 [00:11<00:02,  1.70it/s]training:  86%|████████▋ | 19/22 [00:12<00:01,  1.65it/s]training:  91%|█████████ | 20/22 [00:12<00:01,  1.70it/s]training:  95%|█████████▌| 21/22 [00:13<00:00,  1.66it/s]training: 100%|██████████| 22/22 [00:13<00:00,  1.71it/s]                                                         23.328768372535706
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.37s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.11it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.31it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.48it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.57it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.60it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.70      0.46      0.56       309
+           1       0.29      0.02      0.04       101
+           2       0.48      0.17      0.25       493
+           3       0.75      0.91      0.82      1694
+           4       0.48      0.64      0.55       475
+
+    accuracy                           0.67      3072
+   macro avg       0.54      0.44      0.44      3072
+weighted avg       0.64      0.67      0.63      3072
+
+accuracy = 0.671875, macro_p = 0.5382137243518088, macro_r = 0.4382145542888372, macro_f1 = 0.44169053296966265, AUROC = 0.7935343952429992
+min_loss:5.569344520568848, max_f1:0.7920385708579583, val_loss:5.5862956047058105, val_f1:0.7935343952429992
+freeze
+4
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:30,  1.45s/it]training:   9%|▉         | 2/22 [00:01<00:18,  1.10it/s]training:  14%|█▎        | 3/22 [00:02<00:15,  1.26it/s]training:  18%|█▊        | 4/22 [00:03<00:12,  1.45it/s]training:  23%|██▎       | 5/22 [00:03<00:11,  1.48it/s]training:  27%|██▋       | 6/22 [00:04<00:10,  1.59it/s]training:  32%|███▏      | 7/22 [00:05<00:09,  1.58it/s]training:  36%|███▋      | 8/22 [00:05<00:08,  1.66it/s]training:  41%|████      | 9/22 [00:06<00:08,  1.62it/s]training:  45%|████▌     | 10/22 [00:06<00:07,  1.69it/s]training:  50%|█████     | 11/22 [00:07<00:06,  1.64it/s]training:  55%|█████▍    | 12/22 [00:07<00:05,  1.69it/s]training:  59%|█████▉    | 13/22 [00:08<00:05,  1.65it/s]training:  64%|██████▎   | 14/22 [00:09<00:04,  1.62it/s]training:  68%|██████▊   | 15/22 [00:09<00:04,  1.68it/s]training:  73%|███████▎  | 16/22 [00:10<00:03,  1.64it/s]training:  77%|███████▋  | 17/22 [00:11<00:03,  1.60it/s]training:  82%|████████▏ | 18/22 [00:11<00:02,  1.58it/s]training:  86%|████████▋ | 19/22 [00:12<00:01,  1.66it/s]training:  91%|█████████ | 20/22 [00:12<00:01,  1.65it/s]training:  95%|█████████▌| 21/22 [00:13<00:00,  1.68it/s]training: 100%|██████████| 22/22 [00:14<00:00,  1.64it/s]                                                         22.27910453081131
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.37s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.14it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.35it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.46it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.58it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.63it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.69      0.46      0.55       312
+           1       0.40      0.04      0.07       106
+           2       0.48      0.22      0.30       508
+           3       0.76      0.90      0.82      1687
+           4       0.46      0.62      0.53       459
+
+    accuracy                           0.67      3072
+   macro avg       0.56      0.45      0.45      3072
+weighted avg       0.65      0.67      0.64      3072
+
+accuracy = 0.6695963541666666, macro_p = 0.5560435393166303, macro_r = 0.44706829267516224, macro_f1 = 0.4543162566773346, AUROC = 0.7964968374001853
+min_loss:5.569344520568848, max_f1:0.7935343952429992, val_loss:5.600461483001709, val_f1:0.7964968374001853
+freeze
+5
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:29,  1.39s/it]training:   9%|▉         | 2/22 [00:02<00:19,  1.04it/s]training:  14%|█▎        | 3/22 [00:02<00:15,  1.22it/s]training:  18%|█▊        | 4/22 [00:03<00:13,  1.33it/s]training:  23%|██▎       | 5/22 [00:03<00:11,  1.48it/s]training:  27%|██▋       | 6/22 [00:04<00:10,  1.50it/s]training:  32%|███▏      | 7/22 [00:05<00:09,  1.60it/s]training:  36%|███▋      | 8/22 [00:05<00:08,  1.58it/s]training:  41%|████      | 9/22 [00:06<00:08,  1.57it/s]training:  45%|████▌     | 10/22 [00:06<00:07,  1.65it/s]training:  50%|█████     | 11/22 [00:07<00:06,  1.61it/s]training:  55%|█████▍    | 12/22 [00:08<00:06,  1.58it/s]training:  59%|█████▉    | 13/22 [00:08<00:05,  1.57it/s]training:  64%|██████▎   | 14/22 [00:09<00:04,  1.65it/s]training:  68%|██████▊   | 15/22 [00:10<00:04,  1.61it/s]training:  73%|███████▎  | 16/22 [00:10<00:03,  1.68it/s]training:  77%|███████▋  | 17/22 [00:11<00:03,  1.63it/s]training:  82%|████████▏ | 18/22 [00:11<00:02,  1.60it/s]training:  86%|████████▋ | 19/22 [00:12<00:01,  1.58it/s]training:  91%|█████████ | 20/22 [00:13<00:01,  1.57it/s]training:  95%|█████████▌| 21/22 [00:13<00:00,  1.64it/s]training: 100%|██████████| 22/22 [00:14<00:00,  1.61it/s]                                                         21.891005277633667
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.37s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.11it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.31it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.48it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.56it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.60it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.66      0.49      0.56       313
+           1       0.44      0.04      0.07       106
+           2       0.48      0.17      0.26       500
+           3       0.75      0.90      0.82      1696
+           4       0.45      0.62      0.52       457
+
+    accuracy                           0.67      3072
+   macro avg       0.56      0.44      0.45      3072
+weighted avg       0.64      0.67      0.63      3072
+
+accuracy = 0.6669921875, macro_p = 0.5579350403173373, macro_r = 0.4431233714294608, macro_f1 = 0.44554305070605726, AUROC = 0.7969885615464853
+min_loss:5.569344520568848, max_f1:0.7964968374001853, val_loss:5.605063438415527, val_f1:0.7969885615464853
+freeze
+6
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:30,  1.46s/it]training:   9%|▉         | 2/22 [00:02<00:19,  1.02it/s]training:  14%|█▎        | 3/22 [00:02<00:14,  1.28it/s]training:  18%|█▊        | 4/22 [00:03<00:13,  1.38it/s]training:  23%|██▎       | 5/22 [00:03<00:11,  1.52it/s]training:  27%|██▋       | 6/22 [00:04<00:10,  1.53it/s]training:  32%|███▏      | 7/22 [00:05<00:09,  1.62it/s]training:  36%|███▋      | 8/22 [00:05<00:08,  1.60it/s]training:  41%|████      | 9/22 [00:06<00:08,  1.58it/s]training:  45%|████▌     | 10/22 [00:06<00:07,  1.65it/s]training:  50%|█████     | 11/22 [00:07<00:06,  1.62it/s]training:  55%|█████▍    | 12/22 [00:08<00:06,  1.59it/s]training:  59%|█████▉    | 13/22 [00:08<00:05,  1.66it/s]training:  64%|██████▎   | 14/22 [00:08<00:03,  2.05it/s]training:  68%|██████▊   | 15/22 [00:09<00:03,  2.05it/s]training:  73%|███████▎  | 16/22 [00:09<00:03,  1.93it/s]training:  77%|███████▋  | 17/22 [00:10<00:02,  1.86it/s]training:  82%|████████▏ | 18/22 [00:11<00:02,  1.81it/s]training:  86%|████████▋ | 19/22 [00:11<00:01,  1.77it/s]training:  91%|█████████ | 20/22 [00:12<00:01,  1.75it/s]training:  95%|█████████▌| 21/22 [00:12<00:00,  1.73it/s]training: 100%|██████████| 22/22 [00:13<00:00,  1.72it/s]                                                         21.229970693588257
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.36s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.17it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.41it/s]validating:  67%|██████▋   | 4/6 [00:02<00:01,  1.53it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.58it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.66it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.74      0.47      0.57       310
+           1       0.46      0.06      0.10       105
+           2       0.50      0.17      0.25       501
+           3       0.75      0.91      0.82      1698
+           4       0.46      0.64      0.54       458
+
+    accuracy                           0.68      3072
+   macro avg       0.58      0.45      0.46      3072
+weighted avg       0.66      0.68      0.64      3072
+
+accuracy = 0.6761067708333334, macro_p = 0.5828590194953984, macro_r = 0.4489074320175422, macro_f1 = 0.45719388575883124, AUROC = 0.8041933889875139
+min_loss:5.569344520568848, max_f1:0.7969885615464853, val_loss:5.500555038452148, val_f1:0.8041933889875139
+freeze
+7
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:30,  1.45s/it]training:   9%|▉         | 2/22 [00:02<00:19,  1.02it/s]training:  14%|█▎        | 3/22 [00:02<00:15,  1.21it/s]training:  18%|█▊        | 4/22 [00:03<00:12,  1.40it/s]training:  23%|██▎       | 5/22 [00:03<00:11,  1.45it/s]training:  27%|██▋       | 6/22 [00:04<00:10,  1.57it/s]training:  32%|███▏      | 7/22 [00:05<00:09,  1.56it/s]training:  36%|███▋      | 8/22 [00:05<00:08,  1.56it/s]training:  41%|████      | 9/22 [00:06<00:07,  1.64it/s]training:  45%|████▌     | 10/22 [00:06<00:07,  1.61it/s]training:  50%|█████     | 11/22 [00:07<00:06,  1.59it/s]training:  55%|█████▍    | 12/22 [00:08<00:06,  1.66it/s]training:  59%|█████▉    | 13/22 [00:08<00:05,  1.62it/s]training:  64%|██████▎   | 14/22 [00:09<00:05,  1.60it/s]training:  68%|██████▊   | 15/22 [00:09<00:04,  1.67it/s]training:  73%|███████▎  | 16/22 [00:10<00:03,  1.63it/s]training:  77%|███████▋  | 17/22 [00:11<00:03,  1.60it/s]training:  82%|████████▏ | 18/22 [00:11<00:02,  1.58it/s]training:  86%|████████▋ | 19/22 [00:12<00:01,  1.66it/s]training:  91%|█████████ | 20/22 [00:13<00:01,  1.62it/s]training:  95%|█████████▌| 21/22 [00:13<00:00,  1.60it/s]training: 100%|██████████| 22/22 [00:14<00:00,  1.67it/s]                                                         21.160274028778076
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.36s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.12it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.48it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.61it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.64it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.68      0.47      0.55       315
+           1       0.42      0.08      0.13       103
+           2       0.52      0.18      0.27       490
+           3       0.75      0.91      0.82      1698
+           4       0.48      0.62      0.54       466
+
+    accuracy                           0.68      3072
+   macro avg       0.57      0.45      0.46      3072
+weighted avg       0.65      0.68      0.64      3072
+
+accuracy = 0.6754557291666666, macro_p = 0.5700259305434939, macro_r = 0.45176679646172324, macro_f1 = 0.46356551917672606, AUROC = 0.7988483511541548
+min_loss:5.500555038452148, max_f1:0.8041933889875139, val_loss:5.589211463928223, val_f1:0.7988483511541548
+freeze
+8
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:36,  1.71s/it]training:   9%|▉         | 2/22 [00:02<00:21,  1.09s/it]training:  14%|█▎        | 3/22 [00:02<00:16,  1.18it/s]training:  18%|█▊        | 4/22 [00:03<00:13,  1.32it/s]training:  23%|██▎       | 5/22 [00:04<00:11,  1.45it/s]training:  27%|██▋       | 6/22 [00:04<00:10,  1.50it/s]training:  32%|███▏      | 7/22 [00:05<00:09,  1.53it/s]training:  36%|███▋      | 8/22 [00:05<00:08,  1.61it/s]training:  41%|████      | 9/22 [00:06<00:08,  1.59it/s]training:  45%|████▌     | 10/22 [00:07<00:07,  1.58it/s]training:  50%|█████     | 11/22 [00:07<00:06,  1.65it/s]training:  55%|█████▍    | 12/22 [00:08<00:06,  1.62it/s]training:  59%|█████▉    | 13/22 [00:08<00:05,  1.69it/s]training:  64%|██████▎   | 14/22 [00:09<00:04,  1.64it/s]training:  68%|██████▊   | 15/22 [00:10<00:04,  1.61it/s]training:  73%|███████▎  | 16/22 [00:10<00:03,  1.68it/s]training:  77%|███████▋  | 17/22 [00:11<00:03,  1.63it/s]training:  82%|████████▏ | 18/22 [00:12<00:02,  1.61it/s]training:  86%|████████▋ | 19/22 [00:12<00:01,  1.67it/s]training:  91%|█████████ | 20/22 [00:13<00:01,  1.63it/s]training:  95%|█████████▌| 21/22 [00:13<00:00,  1.61it/s]training: 100%|██████████| 22/22 [00:14<00:00,  1.68it/s]                                                         20.56804347038269
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.39s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.08it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.34it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.47it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.54it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.63it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.69      0.47      0.56       310
+           1       0.46      0.06      0.10       108
+           2       0.49      0.19      0.27       500
+           3       0.75      0.91      0.82      1701
+           4       0.46      0.59      0.52       453
+
+    accuracy                           0.67      3072
+   macro avg       0.57      0.44      0.45      3072
+weighted avg       0.65      0.67      0.63      3072
+
+accuracy = 0.6712239583333334, macro_p = 0.57002146066279, macro_r = 0.4431587753964549, macro_f1 = 0.45372517233092113, AUROC = 0.8004533238177876
+min_loss:5.500555038452148, max_f1:0.8041933889875139, val_loss:5.5630106925964355, val_f1:0.8004533238177876
+freeze
+9
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:30,  1.44s/it]training:   9%|▉         | 2/22 [00:02<00:19,  1.03it/s]training:  14%|█▎        | 3/22 [00:02<00:15,  1.21it/s]training:  18%|█▊        | 4/22 [00:03<00:13,  1.33it/s]training:  23%|██▎       | 5/22 [00:03<00:11,  1.48it/s]training:  27%|██▋       | 6/22 [00:04<00:10,  1.50it/s]training:  32%|███▏      | 7/22 [00:05<00:09,  1.51it/s]training:  36%|███▋      | 8/22 [00:05<00:08,  1.58it/s]training:  41%|████      | 9/22 [00:06<00:08,  1.59it/s]training:  45%|████▌     | 10/22 [00:07<00:07,  1.58it/s]training:  50%|█████     | 11/22 [00:07<00:06,  1.65it/s]training:  55%|█████▍    | 12/22 [00:08<00:06,  1.62it/s]training:  59%|█████▉    | 13/22 [00:08<00:05,  1.65it/s]training:  64%|██████▎   | 14/22 [00:09<00:04,  1.65it/s]training:  68%|██████▊   | 15/22 [00:10<00:04,  1.61it/s]training:  73%|███████▎  | 16/22 [00:10<00:03,  1.65it/s]training:  77%|███████▋  | 17/22 [00:11<00:03,  1.65it/s]training:  82%|████████▏ | 18/22 [00:11<00:02,  1.61it/s]training:  86%|████████▋ | 19/22 [00:12<00:01,  1.58it/s]training:  91%|█████████ | 20/22 [00:13<00:01,  1.57it/s]training:  95%|█████████▌| 21/22 [00:13<00:00,  1.56it/s]training: 100%|██████████| 22/22 [00:14<00:00,  1.55it/s]                                                         20.538719356060028
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:07,  1.43s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.08it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.31it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.43it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.56it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.62it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.69      0.46      0.55       306
+           1       0.38      0.06      0.10       107
+           2       0.47      0.20      0.28       502
+           3       0.75      0.90      0.82      1697
+           4       0.46      0.60      0.53       460
+
+    accuracy                           0.67      3072
+   macro avg       0.55      0.44      0.46      3072
+weighted avg       0.64      0.67      0.64      3072
+
+accuracy = 0.6702473958333334, macro_p = 0.5513008084608654, macro_r = 0.4445910961041468, macro_f1 = 0.45512302125940796, AUROC = 0.8008294621309773
+min_loss:5.500555038452148, max_f1:0.8041933889875139, val_loss:5.59149169921875, val_f1:0.8008294621309773
+not freeze
+10
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:45,  2.17s/it]training:   9%|▉         | 2/22 [00:03<00:33,  1.67s/it]training:  14%|█▎        | 3/22 [00:04<00:27,  1.47s/it]training:  18%|█▊        | 4/22 [00:05<00:24,  1.38s/it]training:  23%|██▎       | 5/22 [00:07<00:22,  1.32s/it]training:  27%|██▋       | 6/22 [00:08<00:20,  1.29s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.28s/it]training:  36%|███▋      | 8/22 [00:10<00:17,  1.27s/it]training:  41%|████      | 9/22 [00:12<00:16,  1.26s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.28s/it]training:  50%|█████     | 11/22 [00:14<00:14,  1.29s/it]training:  55%|█████▍    | 12/22 [00:16<00:12,  1.30s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.30s/it]training:  64%|██████▎   | 14/22 [00:18<00:10,  1.29s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.30s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.31s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:23<00:05,  1.30s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.31s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.30s/it]training:  95%|█████████▌| 21/22 [00:27<00:01,  1.31s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.30s/it]                                                         20.714471399784088
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.35s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.12it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.49it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.57it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.61it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.68      0.47      0.56       306
+           1       0.33      0.02      0.04       101
+           2       0.53      0.20      0.29       509
+           3       0.73      0.93      0.82      1689
+           4       0.51      0.55      0.53       467
+
+    accuracy                           0.68      3072
+   macro avg       0.56      0.43      0.45      3072
+weighted avg       0.65      0.68      0.64      3072
+
+accuracy = 0.6774088541666666, macro_p = 0.5563645974429332, macro_r = 0.4346009939205782, macro_f1 = 0.44574905105214757, AUROC = 0.7987954490478227
+min_loss:5.500555038452148, max_f1:0.8041933889875139, val_loss:5.558327674865723, val_f1:0.7987954490478227
+not freeze
+11
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:44,  2.11s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.63s/it]training:  14%|█▎        | 3/22 [00:04<00:28,  1.49s/it]training:  18%|█▊        | 4/22 [00:06<00:25,  1.41s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.38s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.34s/it]training:  32%|███▏      | 7/22 [00:09<00:20,  1.34s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.31s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.30s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.31s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.31s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.30s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.31s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.30s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.31s/it]                                                         20.323391258716583
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.39s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.10it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.44it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.57it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.62it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.76      0.46      0.57       301
+           1       0.22      0.02      0.04       103
+           2       0.48      0.28      0.36       504
+           3       0.74      0.91      0.82      1698
+           4       0.51      0.54      0.52       466
+
+    accuracy                           0.68      3072
+   macro avg       0.54      0.44      0.46      3072
+weighted avg       0.65      0.68      0.65      3072
+
+accuracy = 0.6790364583333334, macro_p = 0.5429453639645055, macro_r = 0.4423058327400981, macro_f1 = 0.46102235966626254, AUROC = 0.8025434264919726
+min_loss:5.500555038452148, max_f1:0.8041933889875139, val_loss:5.579825401306152, val_f1:0.8025434264919726
+not freeze
+12
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:43,  2.06s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.62s/it]training:  14%|█▎        | 3/22 [00:04<00:28,  1.48s/it]training:  18%|█▊        | 4/22 [00:05<00:25,  1.41s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.37s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.32s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.29s/it]training:  36%|███▋      | 8/22 [00:10<00:17,  1.27s/it]training:  41%|████      | 9/22 [00:12<00:16,  1.26s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.26s/it]training:  50%|█████     | 11/22 [00:14<00:13,  1.25s/it]training:  55%|█████▍    | 12/22 [00:15<00:12,  1.25s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.28s/it]training:  64%|██████▎   | 14/22 [00:18<00:10,  1.29s/it]training:  68%|██████▊   | 15/22 [00:19<00:09,  1.29s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.30s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.30s/it]training:  82%|████████▏ | 18/22 [00:23<00:05,  1.30s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.30s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.30s/it]training:  95%|█████████▌| 21/22 [00:27<00:01,  1.30s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.30s/it]                                                         20.046569049358368
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:07,  1.46s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.09it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.44it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.56it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.62it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.78      0.46      0.58       299
+           1       0.27      0.03      0.05       103
+           2       0.48      0.30      0.37       493
+           3       0.76      0.90      0.82      1712
+           4       0.47      0.55      0.51       465
+
+    accuracy                           0.68      3072
+   macro avg       0.55      0.45      0.47      3072
+weighted avg       0.66      0.68      0.65      3072
+
+accuracy = 0.677734375, macro_p = 0.551475539658143, macro_r = 0.44817481773620527, macro_f1 = 0.4658144143372411, AUROC = 0.8001197173189377
+min_loss:5.500555038452148, max_f1:0.8041933889875139, val_loss:5.6085920333862305, val_f1:0.8001197173189377
+not freeze
+13
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:43,  2.06s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.62s/it]training:  14%|█▎        | 3/22 [00:04<00:27,  1.47s/it]training:  18%|█▊        | 4/22 [00:05<00:25,  1.41s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.38s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.35s/it]training:  32%|███▏      | 7/22 [00:09<00:20,  1.33s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.32s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.32s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.32s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.31s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.30s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.30s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.31s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.30s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.30s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.31s/it]                                                         19.74512928724289
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.35s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.12it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.49it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.57it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.60it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.74      0.47      0.57       310
+           1       0.21      0.03      0.05       107
+           2       0.55      0.23      0.33       500
+           3       0.73      0.92      0.82      1695
+           4       0.51      0.56      0.53       460
+
+    accuracy                           0.68      3072
+   macro avg       0.55      0.44      0.46      3072
+weighted avg       0.65      0.68      0.64      3072
+
+accuracy = 0.6793619791666666, macro_p = 0.54784994878665, macro_r = 0.44239054373741843, macro_f1 = 0.45940357869308157, AUROC = 0.7995778748302945
+min_loss:5.500555038452148, max_f1:0.8041933889875139, val_loss:5.582580089569092, val_f1:0.7995778748302945
+not freeze
+14
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:42,  2.00s/it]training:   9%|▉         | 2/22 [00:03<00:31,  1.60s/it]training:  14%|█▎        | 3/22 [00:04<00:27,  1.46s/it]training:  18%|█▊        | 4/22 [00:05<00:25,  1.40s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.37s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.35s/it]training:  32%|███▏      | 7/22 [00:09<00:20,  1.33s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:16,  1.30s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.26s/it]training:  50%|█████     | 11/22 [00:14<00:13,  1.22s/it]training:  55%|█████▍    | 12/22 [00:15<00:12,  1.21s/it]training:  59%|█████▉    | 13/22 [00:17<00:10,  1.21s/it]training:  64%|██████▎   | 14/22 [00:18<00:09,  1.20s/it]training:  68%|██████▊   | 15/22 [00:19<00:08,  1.20s/it]training:  73%|███████▎  | 16/22 [00:20<00:07,  1.20s/it]training:  77%|███████▋  | 17/22 [00:21<00:06,  1.23s/it]training:  82%|████████▏ | 18/22 [00:23<00:05,  1.25s/it]training:  86%|████████▋ | 19/22 [00:24<00:03,  1.27s/it]training:  91%|█████████ | 20/22 [00:25<00:02,  1.28s/it]training:  95%|█████████▌| 21/22 [00:27<00:01,  1.29s/it]training: 100%|██████████| 22/22 [00:28<00:00,  1.30s/it]                                                         19.733391046524048
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.37s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.11it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.31it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.48it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.57it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.60it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.76      0.47      0.58       305
+           1       0.18      0.02      0.04       103
+           2       0.48      0.26      0.34       494
+           3       0.74      0.90      0.81      1707
+           4       0.47      0.55      0.51       463
+
+    accuracy                           0.67      3072
+   macro avg       0.53      0.44      0.46      3072
+weighted avg       0.64      0.67      0.64      3072
+
+accuracy = 0.6722005208333334, macro_p = 0.5283990442831727, macro_r = 0.43968194529028615, macro_f1 = 0.455323794292558, AUROC = 0.8022677388637023
+min_loss:5.500555038452148, max_f1:0.8041933889875139, val_loss:5.572659492492676, val_f1:0.8022677388637023
+not freeze
+15
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:42,  2.03s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.60s/it]training:  14%|█▎        | 3/22 [00:04<00:27,  1.46s/it]training:  18%|█▊        | 4/22 [00:05<00:25,  1.40s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.37s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.35s/it]training:  32%|███▏      | 7/22 [00:09<00:20,  1.34s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.32s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.31s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.31s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.31s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.30s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.31s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.31s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.30s/it]                                                         19.485386848449707
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.36s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.11it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.49it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.57it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.60it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.78      0.47      0.58       314
+           1       0.20      0.01      0.02       107
+           2       0.50      0.27      0.35       497
+           3       0.73      0.92      0.82      1692
+           4       0.49      0.53      0.51       462
+
+    accuracy                           0.68      3072
+   macro avg       0.54      0.44      0.46      3072
+weighted avg       0.65      0.68      0.64      3072
+
+accuracy = 0.6770833333333334, macro_p = 0.5418563046888011, macro_r = 0.438799894156472, macro_f1 = 0.4556848606118461, AUROC = 0.7996325193723636
+min_loss:5.500555038452148, max_f1:0.8041933889875139, val_loss:5.508978366851807, val_f1:0.7996325193723636
+not freeze
+16
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:44,  2.14s/it]training:   9%|▉         | 2/22 [00:03<00:33,  1.65s/it]training:  14%|█▎        | 3/22 [00:04<00:28,  1.48s/it]training:  18%|█▊        | 4/22 [00:06<00:25,  1.42s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.38s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.35s/it]training:  32%|███▏      | 7/22 [00:09<00:20,  1.34s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.32s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.32s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.28s/it]training:  64%|██████▎   | 14/22 [00:18<00:10,  1.26s/it]training:  68%|██████▊   | 15/22 [00:20<00:08,  1.25s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.25s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.25s/it]training:  82%|████████▏ | 18/22 [00:23<00:04,  1.25s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.23s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.25s/it]training:  95%|█████████▌| 21/22 [00:27<00:01,  1.27s/it]training: 100%|██████████| 22/22 [00:28<00:00,  1.28s/it]                                                         19.379047751426697
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.34s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.13it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.46it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.53it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.63it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.74      0.46      0.56       304
+           1       0.25      0.03      0.05       104
+           2       0.50      0.27      0.35       491
+           3       0.75      0.88      0.81      1707
+           4       0.46      0.60      0.52       466
+
+    accuracy                           0.67      3072
+   macro avg       0.54      0.45      0.46      3072
+weighted avg       0.65      0.67      0.64      3072
+
+accuracy = 0.6708984375, macro_p = 0.5398925771434425, macro_r = 0.44796963273846224, macro_f1 = 0.46059010331622474, AUROC = 0.8067321696383434
+min_loss:5.500555038452148, max_f1:0.8041933889875139, val_loss:5.617074489593506, val_f1:0.8067321696383434
+not freeze
+17
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:44,  2.10s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.63s/it]training:  14%|█▎        | 3/22 [00:04<00:28,  1.48s/it]training:  18%|█▊        | 4/22 [00:06<00:25,  1.41s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.37s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.35s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.33s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.32s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.31s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.31s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.30s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.30s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.30s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.30s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.31s/it]                                                         19.068387925624847
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.34s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.11it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.33it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.47it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.53it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.59it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.84      0.45      0.58       306
+           1       0.05      0.01      0.02        99
+           2       0.51      0.23      0.32       495
+           3       0.74      0.91      0.82      1716
+           4       0.47      0.59      0.53       456
+
+    accuracy                           0.68      3072
+   macro avg       0.52      0.44      0.45      3072
+weighted avg       0.65      0.68      0.64      3072
+
+accuracy = 0.6774088541666666, macro_p = 0.5241709069909346, macro_r = 0.43745848578665913, macro_f1 = 0.4521310948124092, AUROC = 0.799043846529702
+min_loss:5.500555038452148, max_f1:0.8067321696383434, val_loss:5.559053897857666, val_f1:0.799043846529702
+not freeze
+18
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:32,  1.57s/it]training:   9%|▉         | 2/22 [00:02<00:28,  1.42s/it]training:  14%|█▎        | 3/22 [00:04<00:26,  1.37s/it]training:  18%|█▊        | 4/22 [00:05<00:24,  1.34s/it]training:  23%|██▎       | 5/22 [00:06<00:22,  1.33s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.32s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.32s/it]training:  36%|███▋      | 8/22 [00:10<00:18,  1.32s/it]training:  41%|████      | 9/22 [00:12<00:16,  1.31s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.31s/it]training:  50%|█████     | 11/22 [00:14<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:15<00:13,  1.30s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:18<00:10,  1.30s/it]training:  68%|██████▊   | 15/22 [00:19<00:09,  1.31s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.27s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.26s/it]training:  82%|████████▏ | 18/22 [00:23<00:04,  1.25s/it]training:  86%|████████▋ | 19/22 [00:24<00:03,  1.25s/it]training:  91%|█████████ | 20/22 [00:25<00:02,  1.24s/it]training:  95%|█████████▌| 21/22 [00:27<00:01,  1.24s/it]training: 100%|██████████| 22/22 [00:28<00:00,  1.23s/it]                                                         19.060329854488373
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.35s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.09it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.46it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.53it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.59it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.80      0.46      0.58       305
+           1       0.30      0.03      0.05       103
+           2       0.52      0.24      0.33       495
+           3       0.74      0.92      0.82      1709
+           4       0.48      0.56      0.51       460
+
+    accuracy                           0.68      3072
+   macro avg       0.57      0.44      0.46      3072
+weighted avg       0.66      0.68      0.64      3072
+
+accuracy = 0.6780598958333334, macro_p = 0.5686911251588878, macro_r = 0.4401617171032167, macro_f1 = 0.45960562616799827, AUROC = 0.79490663868741
+min_loss:5.500555038452148, max_f1:0.8067321696383434, val_loss:5.496702671051025, val_f1:0.79490663868741
+not freeze
+19
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:43,  2.06s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.62s/it]training:  14%|█▎        | 3/22 [00:04<00:27,  1.47s/it]training:  18%|█▊        | 4/22 [00:05<00:25,  1.41s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.37s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.35s/it]training:  32%|███▏      | 7/22 [00:09<00:20,  1.33s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.32s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.31s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.31s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.30s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.31s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.30s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.31s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.31s/it]                                                         19.011912286281586
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.33s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.13it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.33it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.50it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.57it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.61it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.80      0.46      0.59       314
+           1       0.24      0.10      0.14       100
+           2       0.49      0.26      0.34       490
+           3       0.76      0.87      0.81      1702
+           4       0.45      0.61      0.52       466
+
+    accuracy                           0.67      3072
+   macro avg       0.55      0.46      0.48      3072
+weighted avg       0.65      0.67      0.65      3072
+
+accuracy = 0.6669921875, macro_p = 0.547654971724178, macro_r = 0.45997385374839067, macro_f1 = 0.47844668430636217, AUROC = 0.801764222538892
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.650229454040527, val_f1:0.801764222538892
+not freeze
+20
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:44,  2.13s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.65s/it]training:  14%|█▎        | 3/22 [00:04<00:28,  1.48s/it]training:  18%|█▊        | 4/22 [00:06<00:25,  1.42s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.38s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.35s/it]training:  32%|███▏      | 7/22 [00:09<00:20,  1.34s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.31s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.31s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.31s/it]training:  77%|███████▋  | 17/22 [00:23<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.28s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.27s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.26s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.25s/it]                                                         18.775610208511353
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:07,  1.40s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.08it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.30it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.47it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.59it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.64it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.68      0.45      0.55       306
+           1       0.22      0.08      0.12       103
+           2       0.49      0.29      0.36       507
+           3       0.74      0.88      0.80      1694
+           4       0.46      0.53      0.49       462
+
+    accuracy                           0.66      3072
+   macro avg       0.52      0.45      0.46      3072
+weighted avg       0.64      0.66      0.64      3072
+
+accuracy = 0.6588541666666666, macro_p = 0.5184609262797799, macro_r = 0.44607193752936647, macro_f1 = 0.4642290789958034, AUROC = 0.7972240210490973
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.70355224609375, val_f1:0.7972240210490973
+not freeze
+21
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:43,  2.06s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.61s/it]training:  14%|█▎        | 3/22 [00:04<00:27,  1.47s/it]training:  18%|█▊        | 4/22 [00:05<00:25,  1.40s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.37s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.34s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.33s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.32s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.32s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.31s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.31s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.31s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.31s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.30s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.30s/it]                                                         18.792530238628387
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.34s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.10it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.44it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.53it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.59it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.76      0.47      0.58       317
+           1       0.27      0.08      0.12       102
+           2       0.49      0.23      0.32       485
+           3       0.74      0.92      0.82      1701
+           4       0.51      0.54      0.52       467
+
+    accuracy                           0.68      3072
+   macro avg       0.55      0.45      0.47      3072
+weighted avg       0.65      0.68      0.65      3072
+
+accuracy = 0.6780598958333334, macro_p = 0.5530394729841718, macro_r = 0.4480632162874416, macro_f1 = 0.47210720431488334, AUROC = 0.7984205241085857
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.5388898849487305, val_f1:0.7984205241085857
+not freeze
+22
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:43,  2.08s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.62s/it]training:  14%|█▎        | 3/22 [00:04<00:28,  1.48s/it]training:  18%|█▊        | 4/22 [00:05<00:25,  1.41s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.38s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.35s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.33s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.31s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.31s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.31s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.31s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.30s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.31s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.28s/it]                                                         18.54205632209778
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.35s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.11it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.44it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.53it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.58it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.79      0.47      0.59       320
+           1       0.27      0.03      0.05       105
+           2       0.52      0.24      0.33       499
+           3       0.76      0.88      0.81      1690
+           4       0.43      0.64      0.52       458
+
+    accuracy                           0.67      3072
+   macro avg       0.56      0.45      0.46      3072
+weighted avg       0.66      0.67      0.64      3072
+
+accuracy = 0.66796875, macro_p = 0.5557149678432957, macro_r = 0.4514602041486585, macro_f1 = 0.46000518844738725, AUROC = 0.7910450585412658
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.676085472106934, val_f1:0.7910450585412658
+not freeze
+23
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:49,  2.38s/it]training:   9%|▉         | 2/22 [00:03<00:34,  1.75s/it]training:  14%|█▎        | 3/22 [00:04<00:29,  1.54s/it]training:  18%|█▊        | 4/22 [00:06<00:26,  1.45s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.40s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.37s/it]training:  32%|███▏      | 7/22 [00:10<00:20,  1.34s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:14<00:15,  1.32s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.32s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:18<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.30s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.31s/it]training:  77%|███████▋  | 17/22 [00:23<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.31s/it]training:  91%|█████████ | 20/22 [00:27<00:02,  1.31s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.30s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.30s/it]                                                         18.512820065021515
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.35s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.10it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.46it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.53it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.63it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.71      0.47      0.56       312
+           1       0.14      0.01      0.02       108
+           2       0.49      0.29      0.36       491
+           3       0.74      0.92      0.82      1695
+           4       0.53      0.50      0.52       466
+
+    accuracy                           0.68      3072
+   macro avg       0.52      0.44      0.46      3072
+weighted avg       0.64      0.68      0.65      3072
+
+accuracy = 0.6803385416666666, macro_p = 0.5217802804823577, macro_r = 0.4389198661317863, macro_f1 = 0.4562570853666461, AUROC = 0.7984109779480443
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.4989705085754395, val_f1:0.7984109779480443
+not freeze
+24
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:44,  2.10s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.63s/it]training:  14%|█▎        | 3/22 [00:04<00:28,  1.48s/it]training:  18%|█▊        | 4/22 [00:05<00:25,  1.40s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.37s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.35s/it]training:  32%|███▏      | 7/22 [00:09<00:20,  1.34s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.31s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.30s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.30s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.30s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.30s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.30s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.31s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.30s/it]                                                         18.231707870960236
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.35s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.15it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.37it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.49it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.60it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.69it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.77      0.47      0.59       308
+           1       0.22      0.08      0.11       105
+           2       0.52      0.24      0.33       500
+           3       0.75      0.87      0.81      1698
+           4       0.44      0.61      0.51       461
+
+    accuracy                           0.66      3072
+   macro avg       0.54      0.45      0.47      3072
+weighted avg       0.65      0.66      0.64      3072
+
+accuracy = 0.6634114583333334, macro_p = 0.5411345464920331, macro_r = 0.45459443379030384, macro_f1 = 0.46984697807243886, AUROC = 0.7997138190890776
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.641911029815674, val_f1:0.7997138190890776
+not freeze
+25
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:44,  2.12s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.60s/it]training:  14%|█▎        | 3/22 [00:04<00:27,  1.43s/it]training:  18%|█▊        | 4/22 [00:05<00:24,  1.36s/it]training:  23%|██▎       | 5/22 [00:07<00:22,  1.34s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.33s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.32s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.32s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.31s/it]training:  50%|█████     | 11/22 [00:14<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:18<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.30s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.30s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.30s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.31s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.31s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.30s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.30s/it]                                                         18.24815034866333
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.35s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.11it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.49it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.57it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.61it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.72      0.47      0.57       309
+           1       0.14      0.10      0.12       100
+           2       0.56      0.28      0.37       500
+           3       0.73      0.90      0.81      1703
+           4       0.52      0.51      0.51       460
+
+    accuracy                           0.67      3072
+   macro avg       0.53      0.45      0.48      3072
+weighted avg       0.65      0.67      0.65      3072
+
+accuracy = 0.6731770833333334, macro_p = 0.5338011121192257, macro_r = 0.45151776437032753, macro_f1 = 0.47536204019865586, AUROC = 0.7908625873162323
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.636666297912598, val_f1:0.7908625873162323
+not freeze
+26
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:44,  2.11s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.64s/it]training:  14%|█▎        | 3/22 [00:04<00:28,  1.49s/it]training:  18%|█▊        | 4/22 [00:06<00:25,  1.42s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.38s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.35s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.33s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.32s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.32s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.31s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.30s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.31s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.30s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.30s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.31s/it]                                                         18.09671652317047
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:06,  1.40s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.09it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.31it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.44it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.57it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.62it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.76      0.47      0.58       311
+           1       0.17      0.02      0.03       104
+           2       0.52      0.29      0.37       495
+           3       0.73      0.92      0.82      1696
+           4       0.51      0.50      0.51       466
+
+    accuracy                           0.68      3072
+   macro avg       0.54      0.44      0.46      3072
+weighted avg       0.65      0.68      0.65      3072
+
+accuracy = 0.6803385416666666, macro_p = 0.5393087617778505, macro_r = 0.4406844363289464, macro_f1 = 0.4626485615895012, AUROC = 0.7916801150996114
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.567552089691162, val_f1:0.7916801150996114
+not freeze
+27
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:01<00:41,  1.97s/it]training:   9%|▉         | 2/22 [00:03<00:30,  1.52s/it]training:  14%|█▎        | 3/22 [00:04<00:26,  1.39s/it]training:  18%|█▊        | 4/22 [00:05<00:23,  1.33s/it]training:  23%|██▎       | 5/22 [00:06<00:22,  1.30s/it]training:  27%|██▋       | 6/22 [00:08<00:20,  1.28s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.30s/it]training:  36%|███▋      | 8/22 [00:10<00:18,  1.30s/it]training:  41%|████      | 9/22 [00:12<00:16,  1.30s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.30s/it]training:  50%|█████     | 11/22 [00:14<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.30s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.31s/it]training:  64%|██████▎   | 14/22 [00:18<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:19<00:09,  1.31s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.30s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.30s/it]training:  82%|████████▏ | 18/22 [00:23<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.30s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.31s/it]training:  95%|█████████▌| 21/22 [00:27<00:01,  1.31s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.30s/it]                                                         17.84288638830185
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:07,  1.56s/it]validating:  33%|███▎      | 2/6 [00:02<00:03,  1.02it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.24it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.53it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.91it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.85it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.78      0.44      0.56       301
+           1       0.26      0.08      0.12       100
+           2       0.48      0.29      0.36       501
+           3       0.75      0.88      0.81      1706
+           4       0.44      0.52      0.48       464
+
+    accuracy                           0.66      3072
+   macro avg       0.54      0.44      0.47      3072
+weighted avg       0.64      0.66      0.64      3072
+
+accuracy = 0.662109375, macro_p = 0.5409447228066715, macro_r = 0.4422757088872791, macro_f1 = 0.46610470566950263, AUROC = 0.7877316473872533
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.711719512939453, val_f1:0.7877316473872533
+not freeze
+28
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:47,  2.28s/it]training:   9%|▉         | 2/22 [00:03<00:34,  1.70s/it]training:  14%|█▎        | 3/22 [00:04<00:28,  1.52s/it]training:  18%|█▊        | 4/22 [00:06<00:25,  1.44s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.38s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.36s/it]training:  32%|███▏      | 7/22 [00:10<00:20,  1.34s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:14<00:15,  1.32s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.32s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.30s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.30s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.31s/it]training:  77%|███████▋  | 17/22 [00:23<00:06,  1.31s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.30s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.31s/it]training:  91%|█████████ | 20/22 [00:27<00:02,  1.30s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.31s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.31s/it]                                                         17.94826251268387
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:07,  1.41s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.11it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.32it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.44it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.53it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.58it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.82      0.44      0.57       308
+           1       0.23      0.03      0.05       104
+           2       0.56      0.26      0.35       501
+           3       0.74      0.91      0.81      1694
+           4       0.48      0.58      0.53       465
+
+    accuracy                           0.68      3072
+   macro avg       0.56      0.44      0.46      3072
+weighted avg       0.66      0.68      0.65      3072
+
+accuracy = 0.677734375, macro_p = 0.5638774606498699, macro_r = 0.44321595821543136, macro_f1 = 0.46259708091309515, AUROC = 0.7964900331265623
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.534547805786133, val_f1:0.7964900331265623
+not freeze
+29
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:43,  2.09s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.63s/it]training:  14%|█▎        | 3/22 [00:04<00:27,  1.47s/it]training:  18%|█▊        | 4/22 [00:05<00:24,  1.37s/it]training:  23%|██▎       | 5/22 [00:07<00:22,  1.32s/it]training:  27%|██▋       | 6/22 [00:08<00:20,  1.29s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.28s/it]training:  36%|███▋      | 8/22 [00:10<00:17,  1.27s/it]training:  41%|████      | 9/22 [00:12<00:16,  1.25s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.27s/it]training:  50%|█████     | 11/22 [00:14<00:14,  1.28s/it]training:  55%|█████▍    | 12/22 [00:16<00:12,  1.29s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.29s/it]training:  64%|██████▎   | 14/22 [00:18<00:10,  1.30s/it]training:  68%|██████▊   | 15/22 [00:19<00:09,  1.30s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.30s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.30s/it]training:  82%|████████▏ | 18/22 [00:23<00:05,  1.30s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.30s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.30s/it]training:  95%|█████████▌| 21/22 [00:27<00:01,  1.30s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.30s/it]                                                         17.708730399608612
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:07,  1.40s/it]validating:  33%|███▎      | 2/6 [00:01<00:03,  1.10it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.31it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.44it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.53it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.58it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.70      0.48      0.57       303
+           1       0.26      0.08      0.12        99
+           2       0.56      0.20      0.29       500
+           3       0.75      0.90      0.82      1709
+           4       0.46      0.61      0.52       461
+
+    accuracy                           0.67      3072
+   macro avg       0.55      0.45      0.46      3072
+weighted avg       0.65      0.67      0.64      3072
+
+accuracy = 0.671875, macro_p = 0.5451866740153328, macro_r = 0.4525491855676533, macro_f1 = 0.46485707109986657, AUROC = 0.7938058030461109
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.621903419494629, val_f1:0.7938058030461109
+not freeze
+30
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:44,  2.11s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.64s/it]training:  14%|█▎        | 3/22 [00:04<00:28,  1.48s/it]training:  18%|█▊        | 4/22 [00:06<00:25,  1.41s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.37s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.35s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.33s/it]training:  36%|███▋      | 8/22 [00:11<00:18,  1.33s/it]training:  41%|████      | 9/22 [00:12<00:17,  1.32s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.32s/it]training:  50%|█████     | 11/22 [00:15<00:14,  1.31s/it]training:  55%|█████▍    | 12/22 [00:16<00:13,  1.31s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.30s/it]training:  64%|██████▎   | 14/22 [00:19<00:10,  1.31s/it]training:  68%|██████▊   | 15/22 [00:20<00:09,  1.30s/it]training:  73%|███████▎  | 16/22 [00:21<00:07,  1.31s/it]training:  77%|███████▋  | 17/22 [00:22<00:06,  1.30s/it]training:  82%|████████▏ | 18/22 [00:24<00:05,  1.31s/it]training:  86%|████████▋ | 19/22 [00:25<00:03,  1.31s/it]training:  91%|█████████ | 20/22 [00:26<00:02,  1.31s/it]training:  95%|█████████▌| 21/22 [00:28<00:01,  1.31s/it]training: 100%|██████████| 22/22 [00:29<00:00,  1.30s/it]                                                         17.649592339992523
+validating:   0%|          | 0/6 [00:00<?, ?it/s]validating:  17%|█▋        | 1/6 [00:01<00:07,  1.56s/it]validating:  33%|███▎      | 2/6 [00:02<00:03,  1.02it/s]validating:  50%|█████     | 3/6 [00:02<00:02,  1.24it/s]validating:  67%|██████▋   | 4/6 [00:03<00:01,  1.43it/s]validating:  83%|████████▎ | 5/6 [00:03<00:00,  1.53it/s]validating: 100%|██████████| 6/6 [00:04<00:00,  1.58it/s]                                                                       precision    recall  f1-score   support
+
+           0       0.77      0.47      0.58       309
+           1       0.16      0.05      0.07       104
+           2       0.50      0.23      0.31       491
+           3       0.74      0.90      0.81      1700
+           4       0.46      0.56      0.50       468
+
+    accuracy                           0.67      3072
+   macro avg       0.53      0.44      0.46      3072
+weighted avg       0.64      0.67      0.64      3072
+
+accuracy = 0.6689453125, macro_p = 0.5264652793265604, macro_r = 0.44031183363640114, macro_f1 = 0.45775244777929575, AUROC = 0.7914518912223356
+min_loss:5.496702671051025, max_f1:0.8067321696383434, val_loss:5.638127326965332, val_f1:0.7914518912223356
+not freeze
+31
+training:   0%|          | 0/22 [00:00<?, ?it/s]training:   5%|▍         | 1/22 [00:02<00:44,  2.11s/it]training:   9%|▉         | 2/22 [00:03<00:32,  1.63s/it]training:  14%|█▎        | 3/22 [00:04<00:28,  1.48s/it]training:  18%|█▊        | 4/22 [00:06<00:25,  1.41s/it]training:  23%|██▎       | 5/22 [00:07<00:23,  1.37s/it]training:  27%|██▋       | 6/22 [00:08<00:21,  1.33s/it]training:  32%|███▏      | 7/22 [00:09<00:19,  1.30s/it]training:  36%|███▋      | 8/22 [00:11<00:17,  1.28s/it]training:  41%|████      | 9/22 [00:12<00:16,  1.27s/it]training:  45%|████▌     | 10/22 [00:13<00:15,  1.26s/it]training:  50%|█████     | 11/22 [00:14<00:13,  1.25s/it]training:  55%|█████▍    | 12/22 [00:16<00:12,  1.26s/it]training:  59%|█████▉    | 13/22 [00:17<00:11,  1.28s/it]training:  64%|██████▎   | 14/22 [00:18<00:10,  1.29s/it]training:  68%|██████▊   | 15/22 [00:19<00:09,  1.29s/it]Killed

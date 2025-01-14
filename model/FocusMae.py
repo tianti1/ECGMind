@@ -23,7 +23,7 @@ class TimeSeriesWeighting(nn.Module):
 
     def forward(self, x):
         B, N, L = x.shape
-        patch_size = 50
+        patch_size = 75
         num_patches = L // patch_size
 
         # 计算 FFT 和频率
@@ -79,7 +79,7 @@ class patchEmbed(nn.Module):
         x_patch = self.norm(x_patch)
         return x_patch
 
-class PatchEmbed_1D(nn.Module):
+class Patchembed_1D(nn.Module):
     """ 1D Signal to Patch Embedding
         patch_length may be the same long as embed_dim
     """ 
@@ -245,7 +245,7 @@ class MaskedAutoencoderViT(nn.Module):
         # unshuffle to get the binary mask
         mask = torch.gather(mask, dim=1, index=ids_restore)
 
-        return x_masked, mask, ids_restore
+        return x_masked, mask, ids_restore,noise
     
 
     def random_masking(self, x, mask_ratio):
@@ -340,7 +340,7 @@ class MaskedAutoencoderViT(nn.Module):
         elif self.mask == 'mean':
             x, mask, ids_restore = self.mean_masking(x, mask_ratio)
         elif self.mask == "period":
-            x,mask,ids_restore=self.period_masking(x,mask_ratio,freq_domain_energy)
+            x,mask,ids_restore,noise=self.period_masking(x,mask_ratio,freq_domain_energy)
         cls_token = self.cls_token + self.pos_embed[:, :1, :]
         cls_tokens = cls_token.expand(x.shape[0], -1, -1) #repeat cls_token
         x = torch.cat((cls_tokens, x), dim=1)
@@ -349,7 +349,7 @@ class MaskedAutoencoderViT(nn.Module):
             x = blk(x)
         x = self.norm(x)
 
-        return x, mask, ids_restore
+        return x, mask, ids_restore,freq_domain_energy,noise
 
     def forward_decoder(self, x, ids_restore):
         # embed tokens
@@ -411,26 +411,28 @@ class MaskedAutoencoderViT(nn.Module):
         x = torch.cat((cls_tokens, x), dim=1)
         # 收集中间层特征
         intermediate_features = []
+        weights = [0.1, 0.2, 0.3, 0.4]  # 示例权重
         for i, blk in enumerate(self.blocks):
             x = blk(x)
-            if i % (len(self.blocks) // 4) == 0:
-                if self.fc_norms[i // (len(self.blocks) // 4)] is not None:
+            # 收集最后四层的特征
+            if i >= len(self.blocks) - 4:
+                if self.fc_norm is not None:
                     feat = x[:, 1:, :].mean(dim=1)  # 移除CLS token并平均池化
-                    feat = self.fc_norms[i // (len(self.blocks) // 4)](feat)  # 使用对应的fc_norm
                 else:
                     feat = x[:, 0]  # 使用CLS token
+                # 对特征进行加权
+                feat = feat * weights[i - (len(self.blocks) - 4)]
                 intermediate_features.append(feat)
         
-        # 组合提取的特征
+        # 组合最后几层的特征
         if len(intermediate_features) > 1:
-            # 使用简单平均而不是拼接，这样可以保持特征维度一致
-            outcome = torch.cat(intermediate_features, dim=-1)
-
-            # outcome = torch.stack(intermediate_features).mean(dim=0)
+            outcome = torch.stack(intermediate_features).sum(dim=0)  # 加权后求和
         else:
             outcome = intermediate_features[0]
         
+        
         return outcome
+    
     
 
     def forward_loss(self, signals, mask_ratio=0.75):
@@ -439,6 +441,27 @@ class MaskedAutoencoderViT(nn.Module):
         pred = self.forward_decoder(latent, ids_restore)  # [B,N,L]
         loss = self.compute_loss(signals, pred, mask)
         return loss
+    
+
+        
+    def forward_info_score(self, signals):
+        mask_ratio = self.mask_ratio
+        latent, mask, ids_restore,freq_domain_energy,noise = self.forward_encoder(signals, mask_ratio)
+        pred = self.forward_decoder(latent, ids_restore)  # [B,N,L] 
+        pred_img=self.unpatchify(pred)
+        return pred_img,mask,freq_domain_energy,noise
+    
+
+    
+    def forward_reconstruction(self, signals):
+        mask_ratio = self.mask_ratio        
+        latent, mask, ids_restore, _, _ = self.forward_encoder(signals, mask_ratio)
+        pred = self.forward_decoder(latent, ids_restore)  # [B,N,L]
+        
+        # Only keep the pred where mask is 1, for 0 positions use the data from signals
+        raw_patches = self.patchify(signals)
+        pred = pred * mask.unsqueeze(-1) + raw_patches * (1 - mask.unsqueeze(-1))
+        return self.unpatchify(pred), mask
 
 
 def mae_prefer_custom(args):

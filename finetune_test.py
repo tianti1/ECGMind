@@ -111,7 +111,7 @@ def get_model(args):
         raise ValueError(f"Unknown model_name: {args.model_name}")
 
     if args.classifier_head_name == 'mlp_v1':
-        classifier_head = MlpHeadV1(pretrain_out_dim=256 , class_n=args.class_n)
+        classifier_head = MlpHeadV1(pretrain_out_dim=768  , class_n=args.class_n)
         model = Classifier(pre_train_model=pre_train_model, classifier_head=classifier_head)
         
     if args.task == 'finetune' and args.classifier_head_name is not None:
@@ -121,7 +121,6 @@ def get_model(args):
         if args.pretrain_model_freeze:
             for name, p in model.pre_train_model.named_parameters():
                 p.requires_grad = False  
-
     elif args.task == 'test':
         checkpoint = torch.load(args.ckpt_path, map_location='cpu')
         model.load_state_dict(checkpoint, strict=True)
@@ -164,7 +163,22 @@ def run_finetune(args):
     scheduler = ReduceLROnPlateau(optimizer, mode='max', patience=args.scheduler_patience, factor=args.scheduler_factor, min_lr=args.scheduler_min_lr)
     
     for epoch in range(args.max_epoch_num):
-        # train
+        # if epoch<10:
+        #     if args.task == 'finetune':
+        #         for _, p in model.pre_train_model.named_parameters():
+        #             p.requires_grad = False
+        #         print("freeze")
+        # # train
+        # else:
+        #     if args.task == 'finetune':
+        #         for name, p in model.pre_train_model.named_parameters():
+        #             if 'block' in name:
+        #                 p.requires_grad = False
+                        
+        #             else:
+        #                 p.requires_grad = True
+        #     print("not freeze")
+        # print(epoch)
         all_loss = 0
         prog_iter = tqdm(train_dataloader, desc="training", leave=False)
         for batch_idx, batch in enumerate(prog_iter):
