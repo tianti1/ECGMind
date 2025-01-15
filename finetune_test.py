@@ -18,7 +18,7 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader
 from sklearn.metrics import roc_auc_score
 import model.st_mem.encoder.st_mem_vit as model_st_mem_vit
-
+from sklearn.metrics import accuracy_score
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 torch.manual_seed(41)
 torch.cuda.manual_seed(41)
@@ -44,14 +44,14 @@ def infer(model, data_loader, task ,device):
             loss = loss_func(pred, input_y)
             all_loss += loss
 
-    micro_p, micro_r, micro_f1, _ = precision_recall_fscore_support(y_true_list, y_pred_list, average='micro')
+    acc = accuracy_score(y_true_list, y_pred_list)
     macro_p, macro_r, macro_f1, _ = precision_recall_fscore_support(y_true_list, y_pred_list, average='macro')
     
     auroc = roc_auc_score(y_true_list, y_pred_prob_list, multi_class='ovr')
 
     print(classification_report(y_true_list, y_pred_list))
-    print(f'accuracy = {micro_f1}, macro_p = {macro_p}, macro_r = {macro_r}, macro_f1 = {macro_f1}, AUROC = {auroc}')      
-    return all_loss, micro_f1, macro_p, macro_r, macro_f1, auroc
+    print(f'accuracy = {acc}, macro_p = {macro_p}, macro_r = {macro_r}, macro_f1 = {macro_f1}, AUROC = {auroc}')      
+    return all_loss, acc, macro_p, macro_r, macro_f1, auroc
 
 
 def get_model(args):

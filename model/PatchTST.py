@@ -18,6 +18,8 @@ class PatchTST(nn.Module):
                 random_mask_ratio=args.mask_ratio,
                 use_cls_token=args.use_cls_token,
                 d_model=args.embed_dim,
+                num_hidden_layers=args.encoder_depth,
+                num_attention_heads=args.encoder_num_heads,
             ))
         elif args.task == "finetune":
             self.model = PatchTSTForClassification(PatchTSTConfig(
@@ -30,6 +32,8 @@ class PatchTST(nn.Module):
                 use_cls_token=args.use_cls_token,
                 num_targets=args.class_n,
                 d_model=args.embed_dim,
+                num_hidden_layers=args.encoder_depth,
+                num_attention_heads=args.encoder_num_heads,
             ))
             checkpoint = torch.load(args.ckpt_path, map_location='cpu')
             new_state_dict = {}
@@ -49,6 +53,8 @@ class PatchTST(nn.Module):
                 use_cls_token=args.use_cls_token,
                 num_targets=args.class_n,
                 d_model=args.embed_dim,
+                num_hidden_layers=args.encoder_depth,
+                num_attention_heads=args.encoder_num_heads,
             ))
             checkpoint = torch.load(args.ckpt_path, map_location='cpu')
             self.load_state_dict(checkpoint, strict=False)

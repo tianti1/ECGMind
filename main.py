@@ -47,10 +47,8 @@ def parse_args():
     parser.add_argument('--mask_type', type=str, default='random', help='Mask type [focusmae, PatchTST]')
     parser.add_argument('--all_encode_norm_layer', type=str, default='LayerNorm', help='Encoder norm layer, [focusmae]')
     parser.add_argument('--use_cls_token', type=str, default='true', choices=['true', 'false'], help='Use cls token, [PatchTST]')
-    parser.add_argument('--num_layers', type=int, default=12, help='Number of layers, [PatchTSMixer]')
     parser.add_argument('--self_attn', type=str, default='true', choices=['true', 'false'], help='Use self attention, [PatchTSMixer]')
     parser.add_argument('--use_positional_encoding', type=str, default='true', choices=['true', 'false'], help='Use positional encoding, [PatchTSMixer]')
-    parser.add_argument('--self_attn_heads', type=int, default=12, help='Number of heads, [PatchTSMixer]')
 
 
     args = parser.parse_args()
