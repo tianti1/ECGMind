@@ -50,7 +50,7 @@ def parse_args():
     parser.add_argument('--use_cls_token', type=str, default='true', choices=['true', 'false'], help='Use cls token, [PatchTST]')
     parser.add_argument('--self_attn', type=str, default='true', choices=['true', 'false'], help='Use self attention, [PatchTSMixer]')
     parser.add_argument('--use_positional_encoding', type=str, default='true', choices=['true', 'false'], help='Use positional encoding, [PatchTSMixer]')
-    parser.add_argument('--notify', type=str, default='true', choices=['true', 'false'], help='Email to send gpu info')
+    parser.add_argument('--notify', type=str, default='false', choices=['true', 'false'], help='Email to send gpu info')
 
     args = parser.parse_args()
     
