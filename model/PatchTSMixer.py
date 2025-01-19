@@ -67,7 +67,7 @@ class PatchTSMixer(nn.Module):
     def forward(self, x):
         x = x.transpose(2, 1)
         outputs = self.model(past_values=x)
-        logits = outputs.prediction_logits
+        logits = outputs.prediction_outputs
         return logits
 
     def forward_loss(self, x: torch.Tensor):

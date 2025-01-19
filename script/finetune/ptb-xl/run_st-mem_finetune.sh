@@ -15,17 +15,16 @@ python main.py \
     --batch_size 512 \
     --max_epoch_num 1000 \
     --early_stop_patience 30 \
-    --learning_rate 1e-9 \
+    --learning_rate 1e-3 \
     --weight_decay 1e-3 \
     --scheduler_patience 20 \
     --scheduler_factor 0.8 \
     --scheduler_min_lr 1e-10 \
-    --pretrain_model_freeze true \
-    --multi_stage_finetune true \
-    --ckpt_path "/root/ecg_ai/FocusECG/FocusECG/ckpt/classifier/ptb-xl/FocusMae/202501141310/max_f1=0.8169848299318787.pth" \
+    --pretrain_model_freeze false \
+    --ckpt_path "/root/ecg/FocusECG/ckpt/pre_train/chapman_ningbo_code15/ST-MEM/202501181853/min_val_loss=33.90676498413086.pth" \
     --classifier_head_name "mlp_v1" \
     --class_n 5 \
-    --model_name "FocusMae" \
+    --model_name "ST-MEM" \
     --num_input_channels 1 \
     --signal_length 2250 \
     --patch_size 75 \
@@ -33,9 +32,6 @@ python main.py \
     --mask_ratio 0.75 \
     --mask_type "period" \
     --use_cls_token true \
-    --patch_length 75 \
-    --patch_stride 75 \
-    --patch_size 75 \
     --signal_length 2250 \
     --patch_length 75 \
     --embed_dim 768 \
@@ -46,5 +42,4 @@ python main.py \
     --decoder_num_heads 4 \
     --mlp_ratio 4 \
     --mask_ratio 0.75 \
-    --mask_type "period" \
     --use_cls_token true

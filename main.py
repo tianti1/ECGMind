@@ -51,6 +51,11 @@ def parse_args():
     parser.add_argument('--self_attn', type=str, default='true', choices=['true', 'false'], help='Use self attention, [PatchTSMixer]')
     parser.add_argument('--use_positional_encoding', type=str, default='true', choices=['true', 'false'], help='Use positional encoding, [PatchTSMixer]')
     parser.add_argument('--notify', type=str, default='false', choices=['true', 'false'], help='Email to send gpu info')
+    parser.add_argument('--multi_stage_finetune', type=str, default='false', choices=['true', 'false'], help='Multi stage finetune')
+    parser.add_argument('--clip_grad', type=str, default='false', choices=['true', 'false'], help='Clip grad')
+
+
+
 
     args = parser.parse_args()
     
@@ -60,6 +65,8 @@ def parse_args():
     args.self_attn = args.self_attn.lower() == 'true'
     args.use_positional_encoding = args.use_positional_encoding.lower() == 'true'
     args.notify = args.notify.lower() == 'true'
+    args.multi_stage_finetune = args.multi_stage_finetune.lower() == 'true'
+    args.clip_grad = args.clip_grad.lower() == 'true'
     
     args.device = torch.device("cuda" if torch.cuda.is_available() and args.device == 'cuda' else "cpu")
     torch.manual_seed(41)

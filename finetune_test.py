@@ -114,14 +114,15 @@ def get_model(args):
         classifier_head = MlpHeadV1(pretrain_out_dim=768  , class_n=args.class_n)
         model = Classifier(pre_train_model=pre_train_model, classifier_head=classifier_head)
         
-    if args.task == 'finetune' and args.classifier_head_name is not None:
+    if args.task == 'finetune' and args.classifier_head_name is not None and not args.multi_stage_finetune:
         if args.ckpt_path != "":
             checkpoint = torch.load(args.ckpt_path, map_location='cpu')
             model.pre_train_model.load_state_dict(checkpoint, strict=False)
         if args.pretrain_model_freeze:
             for name, p in model.pre_train_model.named_parameters():
                 p.requires_grad = False  
-    elif args.task == 'test':
+    elif args.task == 'test' or args.multi_stage_finetune:
+        print("multi stage finetune")
         checkpoint = torch.load(args.ckpt_path, map_location='cpu')
         model.load_state_dict(checkpoint, strict=True)
 

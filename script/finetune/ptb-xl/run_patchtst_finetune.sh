@@ -20,8 +20,8 @@ python main.py \
     --scheduler_patience 20 \
     --scheduler_factor 0.8 \
     --scheduler_min_lr 1e-8 \
-    --pretrain_model_freeze true \
-    --ckpt_path "/root/ecg/FocusECG/ckpt/pre_train/chapman_ningbo_code15/PatchTST/202501142341/min_val_loss=76.25680541992188.pth" \
+    --pretrain_model_freeze false \
+    --ckpt_path "/root/ecg/FocusECG/ckpt/pre_train/chapman_ningbo_code15/PatchTST/202501190023/min_val_loss=44.838966369628906.pth" \
     --classifier_head_name "mlp_v1" \
     --class_n 5 \
     --model_name "PatchTST" \

@@ -337,7 +337,7 @@ def st_mem_prefer_custom(args):
         decoder_embed_dim=args.decoder_embed_dim,
         decoder_depth=args.decoder_depth,
         decoder_num_heads=args.decoder_num_heads,
-        mlp_ratio=4,
+        mlp_ratio=args.mlp_ratio,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
     )
     return model

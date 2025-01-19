@@ -98,7 +98,12 @@ def run_pretrain(args):
             else:
                 loss= model.forward_loss(batch)
             loss.backward()
-            optimizer.step()
+
+            if args.clip_grad:
+                # patchtst需要梯度裁剪
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1)  # 梯度裁剪
+            
+            optimizer.step()    
             all_loss += loss    
             step += 1
             if step % args.val_every_n_steps == 0:

@@ -7,6 +7,7 @@ export PYTHONPATH=$(pwd)
 
 python main.py \
     --task "pretrain" \
+    --notify "true" \
     --dataset_name "chapman_ningbo_code15" \
     --train_data_path "/root/data/FocusMAE/train.txt" \
     --val_data_path "/root/data/FocusMAE/val.txt" \
@@ -21,16 +22,17 @@ python main.py \
     --scheduler_patience 10 \
     --scheduler_factor 0.8 \
     --scheduler_min_lr 1e-8 \
-    --model_name "PatchTST" \
+    --model_name "ST-MEM" \
     --num_input_channels 1 \
     --signal_length 2250 \
     --patch_length 75 \
-    --patch_stride 75 \
     --embed_dim 768 \
     --encoder_depth 12 \
     --encoder_num_heads 12 \
-    --norm_layer 'LayerNorm' \
+    --decoder_embed_dim 256 \
+    --decoder_depth 4 \
+    --decoder_num_heads 4 \
+    --mlp_ratio 4 \
     --mask_ratio 0.75 \
-    --mask_type 'random' \
-    --all_encode_norm_layer 'LayerNorm' \
+    --mask_type "period" \
     --use_cls_token true
