@@ -21,11 +21,7 @@ from torch.utils.data import DataLoader
 from sklearn.metrics import roc_auc_score
 import model.st_mem.encoder.st_mem_vit as model_st_mem_vit
 from sklearn.metrics import accuracy_score
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 2d66fc41ececdbd34e3e1cf83f167359a6c77daf
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 torch.manual_seed(41)
 torch.cuda.manual_seed(41)
@@ -59,11 +55,8 @@ def infer(model, data_loader, task ,device):
 
     print(classification_report(y_true_list, y_pred_list))
     print(f'accuracy = {acc}, macro_p = {macro_p}, macro_r = {macro_r}, macro_f1 = {macro_f1}, AUROC = {auroc}')      
-<<<<<<< HEAD
-    return all_loss, micro_f1, macro_p, macro_r, macro_f1, auroc
-=======
+
     return all_loss, acc, macro_p, macro_r, macro_f1, auroc
->>>>>>> 2d66fc41ececdbd34e3e1cf83f167359a6c77daf
 
 
 def get_model(args):
