@@ -5,8 +5,9 @@ import model.FocusMae as model_focus_mae
 import model.PatchTST as model_patchtst
 
 import model.FocusMergeMae as model_focusmerge_mae
-
+import model.Mae as model_mae
 import model.PatchTSMixer as model_patchtsmixer
+import model.RMae as model_rmae
 
 from dataset import PretrainDataset
 from torch.utils.data import DataLoader
@@ -46,6 +47,12 @@ def run_pretrain(args):
     # make model
     if args.model_name == "FocusMae":
         model = model_focus_mae.mae_prefer_custom(args)
+        shutil.copy('model/FocusMae.py', ckpt_dir)
+    elif args.model_name == "RMae":
+        model = model_rmae.mae_prefer_custom(args)
+        shutil.copy('model/RMae.py', ckpt_dir)
+    elif args.model_name == "Mae":
+        model = model_mae.mae_prefer_custom(args)
         shutil.copy('model/FocusMae.py', ckpt_dir)
     elif args.model_name == "PatchTST":
         model = model_patchtst.patchtst_prefer_custom(args)

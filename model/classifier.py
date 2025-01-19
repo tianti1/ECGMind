@@ -29,7 +29,7 @@ class MlpHeadV1(ClassifierHead):
             nn.Linear(pretrain_out_dim, pretrain_out_dim // 2),
             nn.BatchNorm1d(pretrain_out_dim // 2),  # 对应 [batch_size, pretrain_out_dim//2]
             nn.ReLU(),
-            nn.Dropout(0.5),
+            nn.Dropout(0.3),
             
             # 输出层
             nn.Linear(pretrain_out_dim//2, class_n)

@@ -40,7 +40,10 @@ class PretrainDataset(Dataset):
     def __getitem__(self, index):
         data = self.index_arr[index]
         x = np.load(data[0]).astype(np.float32) 
-        x = x[:, 125:-125]
+        if x.ndim == 1:
+            x = x[125:-125]
+        else:
+            x = x[:, 125:-125]
         if self.data_standardization and np.std(x) != 0:
             x = (x - np.mean(x)) / np.std(x)
         x = self.highpass_filter(x)
@@ -82,11 +85,13 @@ class PhysionetDataset(Dataset):
         x = np.load(data[0]).astype(np.float32)
         if self.data_standardization and np.std(x) != 0:
             x = (x - np.mean(x)) / np.std(x)
-        x = x[125:-125]
+        if x.ndim == 1:
+            x = x[125:-125]
+        else:
+            x = x[:, 125:-125]
         x = self.highpass_filter(x)
         x = self.lowpass_filter(x)
         x = torch.tensor(x.copy(), dtype=torch.float32)
-
         if "ptb-xl" in self.dataset_name:
             x = x.unsqueeze(0)
             target = torch.tensor(self.label_map[data[1]], dtype=torch.long)

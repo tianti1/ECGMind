@@ -8,8 +8,8 @@ export PYTHONPATH=$(pwd)
 python main.py \
     --task "finetune" \
     --dataset_name "p1-2_people2000_segmentall_sample_step100_data" \
-    --train_data_path "/root/data/p1-2_people2000_segmentall_sample_step100_data/index_62-74k_step:1.txt" \
-    --val_data_path "/root/data/p1-2_people2000_segmentall_sample_step100_data/index_76-82k_step:1.txt" \
+    --train_data_path "/root/data/p0_r_center/train.txt" \
+    --val_data_path "/root/data/p0_r_center/val.txt" \
     --data_standardization true \
     --device "cuda" \
     --batch_size 128 \

@@ -11,16 +11,16 @@ python main.py \
     --test_data_path "/root/data/ptb-xl/test.txt" \
     --data_standardization true \
     --device "cuda" \
-    --batch_size 8 \
+    --batch_size 64 \
     --max_epoch_num 100 \
     --early_stop_patience 30 \
-    --learning_rate 1e-4 \
+    --learning_rate 1e-3 \
     --weight_decay 1e-3 \
     --scheduler_patience 20 \
     --scheduler_factor 0.8 \
     --scheduler_min_lr 1e-8 \
     --pretrain_model_freeze true \
-    --ckpt_path "/root/ecg_ai/FocusECG/FocusECG/ckpt/classifier/ptb-xl/FocusMae/202501142001/max_f1=0.8175187026562319.pth" \
+    --ckpt_path "/root/ecg_ai/FocusECG/FocusECG/ckpt/classifier/ptb-xl/FocusMae/202501190050/max_f1=0.8178816993935258.pth" \
     --classifier_head_name "mlp_v1" \
     --class_n 5 \
     --model_name "FocusMae" \

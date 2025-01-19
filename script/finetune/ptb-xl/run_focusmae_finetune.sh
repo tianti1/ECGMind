@@ -20,7 +20,7 @@ python main.py \
     --scheduler_patience 20 \
     --scheduler_factor 0.8 \
     --scheduler_min_lr 1e-8 \
-    --pretrain_model_freeze false \
+    --pretrain_model_freeze true \
     --ckpt_path "/root/ecg_ai/FocusECG/FocusECG/ckpt/pre_train/chapman_ningbo_code15/FocusMae/202501121549/min_val_loss=34.15449523925781.pth" \
     --classifier_head_name "mlp_v1" \
     --class_n 5 \

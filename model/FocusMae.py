@@ -57,6 +57,63 @@ class TimeSeriesWeighting(nn.Module):
                     weighted_x[b, patch_indices] += self.weights
 
         return weighted_x
+    
+# import torch
+# import torch.nn as nn
+# from functools import partial
+
+
+# class TimeSeriesWeighting(nn.Module):
+#     def __init__(self, seq_len, patch_size=30):
+#         super(TimeSeriesWeighting, self).__init__()
+#         # 初始化权重为可训练参数
+#         self.norm = partial(nn.LayerNorm, eps=1e-6)(seq_len)
+#         # self.weights = nn.Parameter(torch.sigmoid(torch.randn(1)))  # 可训练权重
+#         import torch.distributions as dist
+#         normal_dist = dist.Normal(0, 1)
+#         weight_value = normal_dist.sample()
+#         self.weights = nn.Parameter(torch.sigmoid(weight_value))
+#         self.patch_size = patch_size
+#         self.num_patches = seq_len // patch_size
+
+#     def forward(self, x):
+#         B, N, L = x.shape  # (batch_size, channels, sequence_length)
+#         patch_size = self.patch_size
+#         num_patches = self.num_patches
+
+#         # Step 1: 计算 FFT 和频率
+#         X_fft = torch.fft.fft(x, dim=-1)  # 对时间维度进行 FFT
+#         freqs = torch.fft.fftfreq(L, d=1.0).to(x.device)
+
+#         # Step 2: 计算频域能量并找到主频率
+#         X_fft_energy = torch.abs(X_fft) ** 2  # 频域能量
+#         topk_indices = torch.topk(X_fft_energy, k=6, dim=-1).indices  # Top-6频率索引
+#         main_freqs = freqs[topk_indices]  # Top-6频率值
+#         # Step 3: 计算理想峰值间隔
+#         main_periods = torch.where(
+#             main_freqs != 0, 1.0 / torch.abs(main_freqs), torch.zeros_like(main_freqs)
+#         )
+#         main_periods = torch.clamp(main_periods, min=1, max=L).to(torch.int64)  # 限制在合法范围
+#         # Step 4: 生成每个通道的加权补丁结果
+#         weighted_x = torch.zeros(B, num_patches, device=x.device)  # 初始化加权结果
+#         peak_indices = torch.arange(L, device=x.device).view(1, 1, 1, -1)  # (1, 1, 1, L)
+        
+#         for i in range(0, 6, 2):  # 每隔两个主频
+#             period_mask = (peak_indices % main_periods[:, :, i:i + 1, None]) == 0  # 找到对应周期的峰值
+#             # 重塑 period_mask 为补丁的形状
+#             period_mask_reshaped = period_mask.view(B,N, num_patches, patch_size)
+  
+#             # 检查每个补丁中是否至少有一个 True
+#             patch_coverage = period_mask_reshaped.any(dim=-1)  # 形状为 (4, 3, num_patches)
+#             patch_indices = (peak_indices // patch_size).to(torch.int64)  # 映射到补丁
+#             patch_mask = period_mask & (patch_indices < num_patches)  # 合法补丁范围内的掩码
+
+#             # 加权累加到每个补丁上
+#             patch_weights = patch_mask.sum(dim=-1).float() * self.weights
+#             weighted_x += patch_weights.sum(dim=1)  # 汇总通道
+
+#         return weighted_x
+
 
 class patchEmbed(nn.Module):
 

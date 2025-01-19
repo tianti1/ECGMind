@@ -13,61 +13,51 @@ import numpy as np
 os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 
 class TimeSeriesWeighting(nn.Module):
-    def __init__(self, len,patch_size=30, num_patches=40):
+    def __init__(self, len, patch_size=30, num_patches=40):
         super(TimeSeriesWeighting, self).__init__()
         # 初始化权重为可训练参数
         import torch.distributions as dist
         normal_dist = dist.Normal(0, 1)
         weight_value = normal_dist.sample()
-        # self.weights = nn.Parameter(torch.zeros(1)) 
         self.norm = partial(nn.LayerNorm, eps=1e-6)(len)
         self.weights = nn.Parameter(torch.sigmoid(weight_value))
 
     def forward(self, x):
         B, N, L = x.shape
-        patch_size = 50
-        num_patches=50
-        # 将数据转为 numpy 数组
-        # self.norm(x)
-        x_copy = x.detach().cpu().numpy()
-        # 存储结果
-        weighted_x = torch.zeros(B, num_patches)
-        X_fft = np.fft.fft(x_copy, axis=2)
-        freqs = np.fft.fftfreq(x_copy.shape[2])
+        patch_size = 75
+        num_patches = L // patch_size
 
-        
-        #topk 频率
-        X_fft=torch.tensor(np.abs(X_fft)**2).to(x.device)
-        values, indices = torch.topk(torch.abs(X_fft), k=4, dim=2, largest=True, sorted=True)
-        main_freqs = freqs[indices.cpu()]
+        # 计算 FFT 和频率
+        x_np = x.detach().cpu().numpy()
+        X_fft = np.fft.fft(x_np, axis=2)
+        freqs = np.fft.fftfreq(L)
 
+        # 计算频域能量并找到主频率
+        X_fft_energy = np.abs(X_fft) ** 2
+        main_freqs = freqs[np.argsort(X_fft_energy, axis=2)[:, :, -6:]]  # Top-6频率
+
+        # 计算理想峰值间隔
+        main_periods = np.abs(1 / main_freqs)
+        main_periods[np.isinf(main_periods)] = 0  # 处理除以零的情况
+
+        # 初始化加权结果
+        weighted_x = torch.zeros(B, num_patches, device=x.device)
+
+        # 矢量化计算每个片段的加权
         for b in range(B):
             for n in range(N):
-                for i in range(0, 4,2):
-                    if main_freqs[b, 0,i] == 0:
-                        continue  # 跳过该循环的后续操作
-                    # 找到峰值
-                    main_periods=np.abs(1 / main_freqs[b,0,i])
-                    # 假设理想的峰值位置每 200 样本一次
-                    ideal_peak_interval = int(main_periods)
-                    # 计算理想的峰值位置
-                    peaks = np.arange(0, x_copy.shape[2], ideal_peak_interval)
-                    # 计算片段数
-                    num_patches = L // patch_size
-                    # 加权
-                    for i in range(num_patches):
-                        start_idx = i * patch_size
-                        end_idx = start_idx + patch_size
-                        # 检查峰值是否在当前片段内
-                        if any((start_idx <= peak < end_idx) for peak in peaks):
-                            weighted_x[b, i] =  weighted_x[b, i]+self.weights
-        freq_domain_energy = weighted_x.detach().cpu().numpy()
-        # min_val = np.min(freq_domain_energy)
-        # max_val = np.max(freq_domain_energy)
-        # freq_domain_energy = (freq_domain_energy - min_val) / (max_val - min_val)
-        freq_domain_energy = torch.tensor(freq_domain_energy).to(x.device)
-        return freq_domain_energy
+                for i in range(0, 6, 2):  # 每隔两个主频
+                    if main_periods[b, n, i] == 0:
+                        continue
+                    ideal_peak_interval = int(main_periods[b, n, i])
+                    peaks = np.arange(0, L, ideal_peak_interval)
+                    
+                    # 计算加权
+                    patch_indices = np.floor(peaks / patch_size).astype(int)
+                    patch_indices = patch_indices[patch_indices < num_patches]  # 剔除越界索引
+                    weighted_x[b, patch_indices] += self.weights
 
+        return weighted_x
 
 class patchEmbed(nn.Module):
 
@@ -86,12 +76,11 @@ class patchEmbed(nn.Module):
         x_patch = x.unfold(dimension=2, size=self.patch_length, step=self.stribe)  # 将输入数据转换为补丁形式
         x_patch = x_patch.permute(0, 2, 1, 3)  # 调整维度顺序以匹配预期的形状 [bs x num_patch x n_vars x patch_len]
         x_patch=x_patch.squeeze(-2)
-
         # Normalize the patches，必须
         x_patch = self.norm(x_patch)
         return x_patch
 
-class PatchEmbed_1D(nn.Module):
+class Patchembed_1D(nn.Module):
     """ 1D Signal to Patch Embedding
         patch_length may be the same long as embed_dim
     """ 
@@ -117,6 +106,7 @@ class PatchEmbed_1D(nn.Module):
             x = x.transpose(1,2) # BCN -> BNC
         x = self.norm(x)
         return x
+    
     
 class MaskedAutoencoderViT(nn.Module):
     
@@ -160,10 +150,9 @@ class MaskedAutoencoderViT(nn.Module):
         self.all_encode_norm_layer=partial(nn.LayerNorm, eps=1e-6)
         if self.all_encode_norm_layer != None:
             self.fc_norm =self.all_encode_norm_layer(embed_dim)
-            self.fc_norm1 = self.all_encode_norm_layer(256)
-            self.fc_norm2 = self.all_encode_norm_layer(128)
-            self.fc_norm3 = self.all_encode_norm_layer(64)
-            self.fc_norm4 = self.all_encode_norm_layer(32)
+            self.fc_norm1 = self.all_encode_norm_layer(embed_dim//2)
+            self.fc_norm2 = self.all_encode_norm_layer(embed_dim//4)
+            self.fc_norm3 = self.all_encode_norm_layer(embed_dim//8)
 
         # --------------------------------------------------------------------------
         # MAE decoder specifics
@@ -343,14 +332,14 @@ class MaskedAutoencoderViT(nn.Module):
             if self.fc_norm is not None:
                 shape=enc.shape[-1]
                 enc = enc[:, 1:, :].mean(dim=1)
-                if shape==256:
-                    outcome=self.fc_norm11(enc)
-                elif shape==128:
-                    outcome=self.fc_norm22(enc)
-                elif shape==64:
-                    outcome=self.fc_norm33(enc)
+                if shape==768:
+                    outcome=self.fc_norm(enc)
+                elif shape==768//2:
+                    outcome=self.fc_norm1(enc)
+                elif shape==768//4:
+                    outcome=self.fc_norm2(enc)
                 else: 
-                    outcome=self.fc_norm44(enc)
+                    outcome=self.fc_norm3(enc)
                 # outcome=self.fc_norm3(enc)
                 outcome_list.append(outcome)
             else:
