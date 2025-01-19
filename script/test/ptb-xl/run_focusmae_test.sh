@@ -20,7 +20,8 @@ python main.py \
     --scheduler_factor 0.8 \
     --scheduler_min_lr 1e-8 \
     --pretrain_model_freeze true \
-    --ckpt_path "/root/ecg_ai/FocusECG/FocusECG/ckpt/classifier/ptb-xl/FocusMae/202501190050/max_f1=0.8178816993935258.pth" \
+    --ckpt_path "/root/ecg/FocusECG/ckpt/classifier/ptb-xl/FocusMae/202501172356/max_f1=0.8174244079741728.pth" \
+>>>>>>> 2d66fc41ececdbd34e3e1cf83f167359a6c77daf
     --classifier_head_name "mlp_v1" \
     --class_n 5 \
     --model_name "FocusMae" \

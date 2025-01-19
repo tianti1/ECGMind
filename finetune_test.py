@@ -21,8 +21,11 @@ from torch.utils.data import DataLoader
 from sklearn.metrics import roc_auc_score
 import model.st_mem.encoder.st_mem_vit as model_st_mem_vit
 from sklearn.metrics import accuracy_score
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2d66fc41ececdbd34e3e1cf83f167359a6c77daf
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 torch.manual_seed(41)
 torch.cuda.manual_seed(41)
@@ -48,7 +51,7 @@ def infer(model, data_loader, task ,device):
             loss = loss_func(pred, input_y)
             all_loss += loss
 
-    micro_p, micro_r, micro_f1, _ = precision_recall_fscore_support(y_true_list, y_pred_list, average='micro')
+    acc = accuracy_score(y_true_list, y_pred_list)
     macro_p, macro_r, macro_f1, _ = precision_recall_fscore_support(y_true_list, y_pred_list, average='macro')
     
     acc=accuracy_score(y_true_list, y_pred_list)
@@ -56,7 +59,11 @@ def infer(model, data_loader, task ,device):
 
     print(classification_report(y_true_list, y_pred_list))
     print(f'accuracy = {acc}, macro_p = {macro_p}, macro_r = {macro_r}, macro_f1 = {macro_f1}, AUROC = {auroc}')      
+<<<<<<< HEAD
     return all_loss, micro_f1, macro_p, macro_r, macro_f1, auroc
+=======
+    return all_loss, acc, macro_p, macro_r, macro_f1, auroc
+>>>>>>> 2d66fc41ececdbd34e3e1cf83f167359a6c77daf
 
 
 def get_model(args):
@@ -124,14 +131,15 @@ def get_model(args):
         classifier_head = MlpHeadV1(pretrain_out_dim=768  , class_n=args.class_n)
         model = Classifier(pre_train_model=pre_train_model, classifier_head=classifier_head)
         
-    if args.task == 'finetune' and args.classifier_head_name is not None:
+    if args.task == 'finetune' and args.classifier_head_name is not None and not args.multi_stage_finetune:
         if args.ckpt_path != "":
             checkpoint = torch.load(args.ckpt_path, map_location='cpu')
             model.pre_train_model.load_state_dict(checkpoint, strict=True)
         if args.pretrain_model_freeze:
             for name, p in model.pre_train_model.named_parameters():
                 p.requires_grad = False  
-    elif args.task == 'test':
+    elif args.task == 'test' or args.multi_stage_finetune:
+        print("multi stage finetune")
         checkpoint = torch.load(args.ckpt_path, map_location='cpu')
         model.load_state_dict(checkpoint, strict=True)
 

@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from transformers import PatchTSTForPretraining, PatchTSTForClassification, PatchTSTConfig
+from transformers import PatchTSMixerConfig, PatchTSMixerForPretraining,PatchTSMixerForTimeSeriesClassification
 
 class PatchTSMixer(nn.Module):
     name = "PatchTSMixer"
@@ -8,7 +8,7 @@ class PatchTSMixer(nn.Module):
     def __init__(self, args):
         super().__init__()
         if args.task == "pretrain":
-            self.model = PatchTSTForPretraining(PatchTSTConfig(
+            self.model = PatchTSMixerForPretraining(PatchTSMixerConfig(
                 num_input_channels=args.num_input_channels,
                 context_length=args.signal_length,
                 patch_length=args.patch_length,
@@ -17,13 +17,13 @@ class PatchTSMixer(nn.Module):
                 random_mask_ratio=args.mask_ratio,
                 use_cls_token=args.use_cls_token,
                 d_model=args.embed_dim,
-                num_layers=args.num_layers,
+                num_layers=args.encoder_depth,
                 self_attn=args.self_attn,
+                self_attn_heads=args.encoder_num_heads,
                 use_positional_encoding=args.use_positional_encoding,
-                self_attn_heads=args.self_attn_heads,
             ))
         elif args.task == "finetune":
-            self.model = PatchTSTForClassification(PatchTSTConfig(
+            self.model = PatchTSMixerForTimeSeriesClassification(PatchTSMixerConfig(
                 num_input_channels=args.num_input_channels,
                 context_length=args.signal_length,
                 patch_length=args.patch_length,
@@ -33,10 +33,10 @@ class PatchTSMixer(nn.Module):
                 use_cls_token=args.use_cls_token,
                 num_targets=args.class_n,
                 d_model=args.embed_dim,
-                num_layers=args.num_layers,
+                num_layers=args.encoder_depth,
                 self_attn=args.self_attn,
+                self_attn_heads=args.encoder_num_heads,
                 use_positional_encoding=args.use_positional_encoding,
-                self_attn_heads=args.self_attn_heads,
             ))
             checkpoint = torch.load(args.ckpt_path, map_location='cpu')
             new_state_dict = {}
@@ -46,7 +46,7 @@ class PatchTSMixer(nn.Module):
                     new_state_dict[new_key] = v
             self.model.model.load_state_dict(new_state_dict, strict=True)
         elif args.task == "test":
-            self.model = PatchTSTForClassification(PatchTSTConfig(
+            self.model = PatchTSMixerForTimeSeriesClassification(PatchTSMixerConfig(
                 num_input_channels=args.num_input_channels,
                 context_length=args.signal_length,
                 patch_length=args.patch_length,
@@ -56,10 +56,10 @@ class PatchTSMixer(nn.Module):
                 use_cls_token=args.use_cls_token,
                 num_targets=args.class_n,
                 d_model=args.embed_dim,
-                num_layers=args.num_layers,
+                num_layers=args.encoder_depth,
                 self_attn=args.self_attn,
+                self_attn_heads=args.encoder_num_heads,
                 use_positional_encoding=args.use_positional_encoding,
-                self_attn_heads=args.self_attn_heads,
             ))
             checkpoint = torch.load(args.ckpt_path, map_location='cpu')
             self.load_state_dict(checkpoint, strict=False)
@@ -67,7 +67,7 @@ class PatchTSMixer(nn.Module):
     def forward(self, x):
         x = x.transpose(2, 1)
         outputs = self.model(past_values=x)
-        logits = outputs.prediction_logits
+        logits = outputs.prediction_outputs
         return logits
 
     def forward_loss(self, x: torch.Tensor):

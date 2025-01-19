@@ -16,12 +16,12 @@ python main.py \
     --max_epoch_num 1000 \
     --val_every_n_steps 40 \
     --early_stop_patience 200 \
-    --learning_rate 0.0001 \
+    --learning_rate 1e-3 \
     --weight_decay 0 \
     --scheduler_patience 10 \
     --scheduler_factor 0.8 \
     --scheduler_min_lr 1e-8 \
-    --model_name "PatchTST" \
+    --model_name "PatchTSMixer" \
     --num_input_channels 1 \
     --signal_length 2250 \
     --patch_length 75 \

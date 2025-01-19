@@ -7,9 +7,9 @@ export PYTHONPATH=$(pwd)
 
 python main.py \
     --task "finetune" \
-    --dataset_name "ptb-xl" \
-    --train_data_path "/root/data/ptb-xl/train.txt" \
-    --val_data_path "/root/data/ptb-xl/val.txt" \
+    --dataset_name "cpsc2018" \
+    --train_data_path "/root/data/cpsc2018/train.txt" \
+    --val_data_path "/root/data/cpsc2018/val.txt" \
     --data_standardization true \
     --device "cuda" \
     --batch_size 512 \
@@ -23,7 +23,7 @@ python main.py \
     --pretrain_model_freeze false \
     --ckpt_path "/root/ecg/FocusECG/ckpt/pre_train/chapman_ningbo_code15/PatchTSMixer/202501142356/min_val_loss=66.91081237792969.pth" \
     --classifier_head_name "mlp_v1" \
-    --class_n 5 \
+    --class_n 9 \
     --model_name "PatchTSMixer" \
     --num_input_channels 1 \
     --signal_length 2250 \

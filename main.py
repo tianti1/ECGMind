@@ -2,6 +2,7 @@ import torch
 import argparse
 from pretrain import run_pretrain
 from finetune_test import run_finetune, run_test
+from check import send_email
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Pretrain model parameter configuration')
@@ -47,10 +48,13 @@ def parse_args():
     parser.add_argument('--mask_type', type=str, default='random', help='Mask type [focusmae, PatchTST]')
     parser.add_argument('--all_encode_norm_layer', type=str, default='LayerNorm', help='Encoder norm layer, [focusmae]')
     parser.add_argument('--use_cls_token', type=str, default='true', choices=['true', 'false'], help='Use cls token, [PatchTST]')
-    parser.add_argument('--num_layers', type=int, default=12, help='Number of layers, [PatchTSMixer]')
     parser.add_argument('--self_attn', type=str, default='true', choices=['true', 'false'], help='Use self attention, [PatchTSMixer]')
     parser.add_argument('--use_positional_encoding', type=str, default='true', choices=['true', 'false'], help='Use positional encoding, [PatchTSMixer]')
-    parser.add_argument('--self_attn_heads', type=int, default=12, help='Number of heads, [PatchTSMixer]')
+    parser.add_argument('--notify', type=str, default='false', choices=['true', 'false'], help='Email to send gpu info')
+    parser.add_argument('--multi_stage_finetune', type=str, default='false', choices=['true', 'false'], help='Multi stage finetune')
+    parser.add_argument('--clip_grad', type=str, default='false', choices=['true', 'false'], help='Clip grad')
+
+
 
 
     args = parser.parse_args()
@@ -60,6 +64,9 @@ def parse_args():
     args.use_cls_token = args.use_cls_token.lower() == 'true'
     args.self_attn = args.self_attn.lower() == 'true'
     args.use_positional_encoding = args.use_positional_encoding.lower() == 'true'
+    args.notify = args.notify.lower() == 'true'
+    args.multi_stage_finetune = args.multi_stage_finetune.lower() == 'true'
+    args.clip_grad = args.clip_grad.lower() == 'true'
     
     args.device = torch.device("cuda" if torch.cuda.is_available() and args.device == 'cuda' else "cpu")
     torch.manual_seed(41)
@@ -71,7 +78,6 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    print(args)
     if args.task == 'pretrain':
         run_pretrain(args)
     elif args.task == 'finetune':
@@ -80,3 +86,7 @@ if __name__ == '__main__':
         run_test(args)
     else:
         raise ValueError(f'Invalid task: {args.task}')
+    
+    if args.notify:
+        send_email(args.task, f'{args.task} finished')
+    

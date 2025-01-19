@@ -66,7 +66,7 @@ class PhysionetDataset(Dataset):
             index_arr.append(temp)
         self.index_arr = index_arr
 
-        if dataset_name in ["p1-2_people2000_segmentall_sample_step100_data"]:
+        if 'icentia' in dataset_name:
             self.label_map = {'N':0, 'Q':1, 'S':2, 'V':3}
         elif "ptb-xl" in dataset_name:
             self.label_map = {'CD':0, 'HYP':1, 'MI':2, 'NORM':3, 'STTC':4}
@@ -85,6 +85,7 @@ class PhysionetDataset(Dataset):
         x = np.load(data[0]).astype(np.float32)
         if self.data_standardization and np.std(x) != 0:
             x = (x - np.mean(x)) / np.std(x)
+<<<<<<< HEAD
         if x.ndim == 1:
             x = x[125:-125]
         else:
@@ -101,4 +102,14 @@ class PhysionetDataset(Dataset):
             x = x.unsqueeze(0)
             target = torch.tensor(self.label_map[data[2]], dtype=torch.long)
             
+=======
+    
+        x = np.squeeze(x)
+        x = x[125:-125]
+        x = self.highpass_filter(x)
+        x = self.lowpass_filter(x)
+        x = torch.tensor(x.copy(), dtype=torch.float32)
+        x = x.unsqueeze(0)     
+        target = torch.tensor(self.label_map[data[1]], dtype=torch.long)
+>>>>>>> 2d66fc41ececdbd34e3e1cf83f167359a6c77daf
         return x, target

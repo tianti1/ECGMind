@@ -8,22 +8,31 @@ export PYTHONPATH=$(pwd)
 python main.py \
     --task "test" \
     --dataset_name "ptb-xl" \
-    --test_data_path "/root/data/ptb-xl/test.txt" \
+    --train_data_path "/root/data/ptb-xl/train.txt" \
+    --val_data_path "/root/data/ptb-xl/val.txt" \
     --data_standardization true \
     --device "cuda" \
-    --batch_size 512 \
-    --ckpt_path "/root/ecg/FocusECG/ckpt/classifier/ptb-xl/PatchTSMixer/202501052223/max_f1=0.435494309362013.pth" \
+    --batch_size 36 \
+    --max_epoch_num 1000 \
+    --early_stop_patience 60 \
+    --learning_rate 1e-3 \
+    --weight_decay 1e-3 \
+    --scheduler_patience 20 \
+    --scheduler_factor 0.8 \
+    --scheduler_min_lr 1e-8 \
+    --ckpt_path "/root/ecg/FocusECG/ckpt/classifier/ptb-xl/PatchTSMixer/202501172114/max_f1=0.777348848575525.pth" \
+    --classifier_head_name "mlp_v1" \
     --class_n 5 \
     --model_name "PatchTSMixer" \
     --num_input_channels 1 \
-    --signal_length 1200 \
-    --patch_length 30 \
-    --patch_stride 30 \
-    --embed_dim 256 \
+    --signal_length 2250 \
+    --patch_length 75 \
+    --patch_stride 75 \
+    --embed_dim 768 \
+    --encoder_depth 12 \
+    --encoder_num_heads 12 \
     --mask_ratio 0.75 \
     --mask_type "random" \
     --use_cls_token true \
-    --num_layers 48 \
     --self_attn true \
-    --use_positional_encoding true \
-    --self_attn_heads 16
+    --use_positional_encoding true

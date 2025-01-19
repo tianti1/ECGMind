@@ -15,7 +15,7 @@ python main.py \
     --batch_size 512 \
     --max_epoch_num 1000 \
     --early_stop_patience 30 \
-    --learning_rate 1e-3 \
+    --learning_rate 1e-9 \
     --weight_decay 1e-3 \
     --scheduler_patience 20 \
     --scheduler_factor 0.8 \
