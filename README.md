@@ -1,1 +1,1 @@
-# FocusECG
+# ECGMind

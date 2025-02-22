@@ -73,6 +73,10 @@ class PhysionetDataset(Dataset):
         elif "cpsc2018" in dataset_name:
             self.label_map = {'AF':0, 'IAVB':1, 'LBBB':2, 'NSR':3, 'PAC':4,
                               'PVC':5, 'RBBB':6, 'STD':7, 'STE':8}
+        elif "physionet2017" in dataset_name:
+            self.label_map = {'~':0,'A':1,'N':2,'O':3}
+        elif "ecghm2025" in dataset_name:
+            self.label_map = {'AF':0,'ABNORMAL':1,'NORMAL':2}
 
         self.highpass_filter = HighpassFilter(fs=250, cutoff=0.67)
         self.lowpass_filter = LowpassFilter(fs=250, cutoff=40)
@@ -83,9 +87,10 @@ class PhysionetDataset(Dataset):
     def __getitem__(self, index):
         data = self.index_arr[index]
         x = np.load(data[0]).astype(np.float32)
+        if(self.dataset_name == "ecghm2025"):
+            x=np.transpose(x, (1,0))
         if self.data_standardization and np.std(x) != 0:
             x = (x - np.mean(x)) / np.std(x)
-<<<<<<< HEAD
         if x.ndim == 1:
             x = x[125:-125]
         else:
@@ -99,17 +104,14 @@ class PhysionetDataset(Dataset):
         elif "cpsc2018" in self.dataset_name:
             target = torch.tensor(self.label_map[data[1]], dtype=torch.long)
         else:
-            x = x.unsqueeze(0)
-            target = torch.tensor(self.label_map[data[2]], dtype=torch.long)
-            
-=======
-    
-        x = np.squeeze(x)
-        x = x[125:-125]
-        x = self.highpass_filter(x)
-        x = self.lowpass_filter(x)
-        x = torch.tensor(x.copy(), dtype=torch.float32)
-        x = x.unsqueeze(0)     
-        target = torch.tensor(self.label_map[data[1]], dtype=torch.long)
->>>>>>> 2d66fc41ececdbd34e3e1cf83f167359a6c77daf
+            # x = x.unsqueeze(0)
+            target = torch.tensor(self.label_map[data[1]], dtype=torch.long)
+        # x = np.squeeze(x)
+        # x = x[125:-125]
+        # print(x.shape)
+        # x = self.highpass_filter(x)
+        # x = self.lowpass_filter(x)
+        # x = torch.tensor(x.copy(), dtype=torch.float32)
+        # x = x.unsqueeze(0)     
+        # target = torch.tensor(self.label_map[data[1]], dtype=torch.long)
         return x, target

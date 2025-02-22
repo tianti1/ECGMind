@@ -3,23 +3,18 @@ import torch
 import pytz
 import shutil
 import torch.optim as optim
-import model.FocusMae as model_focus_mae
-import model.FocusMergeMae as model_focusmerge_mae
-import model.PatchTST as model_patchtst
-import model.PatchTSMixer as model_patchtsmixer
-import model.Mae as model_mae
-import model.RMae as model_rmae
+import model.ECGMind as model_ecgmind
 from tqdm import tqdm
 from dataset import PhysionetDataset
 from datetime import datetime
 from sklearn.metrics import precision_recall_fscore_support
 from sklearn.metrics import classification_report 
-from model.classifier import MlpHeadV1, Classifier
+from model.classifier import Classifier
+from model.ECGMind import MlpHeadV1
 from util.schedule import EarlyStopping
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader
 from sklearn.metrics import roc_auc_score
-import model.st_mem.encoder.st_mem_vit as model_st_mem_vit
 from sklearn.metrics import accuracy_score
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -62,60 +57,8 @@ def infer(model, data_loader, task ,device):
 def get_model(args):
     pre_train_model, classifier_head = None, None
 
-    if args.model_name == 'FocusMae':
-        pre_train_model = model_focus_mae.mae_prefer_custom(args)
-    elif args.model_name == 'Mae':
-        pre_train_model = model_mae.mae_prefer_custom(args)
-    elif args.model_name == 'RMae':
-        pre_train_model = model_rmae.mae_prefer_custom(args)
-    elif args.model_name == 'FocusMergeMae':
-        pre_train_model = model_focusmerge_mae.mae_prefer_custom(args)
-    elif args.model_name == 'PatchTST':
-        model = model_patchtst.patchtst_prefer_custom(args)
-        if args.task == 'finetune' and args.pretrain_model_freeze:
-            for _, p in model.model.model.named_parameters():
-                p.requires_grad = False
-        model = model.to(args.device)
-        return model
-    elif args.model_name == 'PatchTSMixer':
-        model = model_patchtsmixer.patchtsmixer_prefer_custom(args)
-        if args.task == 'finetune' and args.pretrain_model_freeze:
-            for _, p in model.model.model.named_parameters():
-                p.requires_grad = False
-        model = model.to(args.device)
-        return model
-    elif args.model_name == 'ST-MEM':
-        model = model_st_mem_vit.ST_MEM_ViT(
-            seq_len=args.signal_length,
-            patch_size=args.patch_length,
-            num_leads=args.num_input_channels,
-            num_classes=args.class_n,
-            width=args.embed_dim,
-            depth=args.encoder_depth,
-            heads=args.encoder_num_heads,
-            mlp_dim=args.mlp_ratio * args.embed_dim,
-        )
-        model = model.to(args.device)
-
-        checkpoint = torch.load(args.ckpt_path, map_location='cpu')
-        if args.task == 'finetune':
-            new_state_dict = {}
-            for k, v in checkpoint.items():
-                if k.startswith("encoder."):
-                    new_key = k[len("encoder."):]
-                    new_state_dict[new_key] = v
-            model.load_state_dict(new_state_dict, strict=False)
-        else:
-            model.load_state_dict(checkpoint, strict=False)
-        
-
-        if args.task == 'finetune' and args.pretrain_model_freeze:
-            for _, p in model.named_parameters():
-                p.requires_grad = False
-            for _, p in model.head.named_parameters():
-                p.requires_grad = True
-
-        return model
+    if args.model_name == 'ECGMind':
+        pre_train_model = model_ecgmind.mae_prefer_custom(args)
     else:
         raise ValueError(f"Unknown model_name: {args.model_name}")
 
@@ -146,10 +89,8 @@ def run_finetune(args):
     ckpt_dir = 'ckpt/classifier/{}/{}/{}'.format(args.dataset_name, args.model_name, datetime.now().astimezone(pytz.timezone('Asia/Shanghai')).strftime("%Y%m%d%H%M"))
     os.makedirs(ckpt_dir, True)
     shutil.copy('finetune_test.py', ckpt_dir)
-    if args.model_name == 'ST-MEM':
-        shutil.copytree(f'model/st_mem', os.path.join(ckpt_dir, 'st_mem'))
-    else:
-        shutil.copy(f'model/{args.model_name}.py', ckpt_dir)
+   
+    shutil.copy(f'model/{args.model_name}.py', ckpt_dir)
     shutil.copy('.vscode/launch.json', ckpt_dir)
     shutil.copy(f'script/finetune/{args.dataset_name}/run_{args.model_name.lower()}_finetune.sh', ckpt_dir)
 
@@ -185,16 +126,6 @@ def run_finetune(args):
     #scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=3, factor=0.5)
 
     for epoch in range(args.max_epoch_num):
-        # # if args.task == 'finetune':
-        # #     for name, p in model.pre_train_model.named_parameters():
-        # #         if 'fc' in name:
-        # #             p.requires_grad = True
-        # #         else:
-        # #             p.requires_grad = False
-        # # print(epoch)
-        # # 解冻模型的最后两层
-        # for param in model.pre_train_model.blocks[-1:].parameters():
-        #     param.requires_grad = True
         all_loss = 0
         prog_iter = tqdm(train_dataloader, desc="training", leave=False)
         for batch_idx, batch in enumerate(prog_iter):

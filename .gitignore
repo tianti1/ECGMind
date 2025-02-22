@@ -1,5 +1,8 @@
 tmp.log
+nohup.log
 __pycache__/
-ST-MEM/
 ckpt/
 ckpt
+analysis/
+analysis
+

@@ -2,7 +2,6 @@ import torch
 import argparse
 from pretrain import run_pretrain
 from finetune_test import run_finetune, run_test
-from check import send_email
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Pretrain model parameter configuration')
@@ -87,6 +86,5 @@ if __name__ == '__main__':
     else:
         raise ValueError(f'Invalid task: {args.task}')
     
-    if args.notify:
-        send_email(args.task, f'{args.task} finished')
+
     

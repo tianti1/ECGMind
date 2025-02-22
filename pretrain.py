@@ -1,14 +1,7 @@
 import os
 import logging
 import shutil
-import model.FocusMae as model_focus_mae 
-import model.PatchTST as model_patchtst
-
-import model.FocusMergeMae as model_focusmerge_mae
-import model.Mae as model_mae
-import model.PatchTSMixer as model_patchtsmixer
-import model.RMae as model_rmae
-
+import model.ECGMind as model_ecgmind
 from dataset import PretrainDataset
 from torch.utils.data import DataLoader
 from datetime import datetime
@@ -18,20 +11,19 @@ from tqdm import tqdm
 import torch
 import pytz
 import torch.optim as optim
-import model.st_mem.st_mem as model_st_mem
 def init_logger(model_name, dataset_name, exp_id):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
-    # 创建文件处理程序
+
     root = f'./ckpt/pre_train/{dataset_name}/{model_name}/{exp_id}'
     os.makedirs(root, True)
     path = os.path.join(root, f"{exp_id}_exp.log")
     file_handler = logging.FileHandler(path)
     file_handler.setLevel(logging.INFO)
-    # 创建格式化器
+
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     file_handler.setFormatter(formatter)
-    # 添加文件处理程序到logger
+
     logger.addHandler(file_handler)
     return logger
 
@@ -45,27 +37,23 @@ def run_pretrain(args):
     shutil.copy(f'script/pretrain/{args.dataset_name}/run_{args.model_name.lower()}_pretrain.sh', ckpt_dir)
 
     # make model
-    if args.model_name == "FocusMae":
-        model = model_focus_mae.mae_prefer_custom(args)
-        shutil.copy('model/FocusMae.py', ckpt_dir)
-    elif args.model_name == "RMae":
-        model = model_rmae.mae_prefer_custom(args)
-        shutil.copy('model/RMae.py', ckpt_dir)
-    elif args.model_name == "Mae":
-        model = model_mae.mae_prefer_custom(args)
-        shutil.copy('model/FocusMae.py', ckpt_dir)
-    elif args.model_name == "PatchTST":
-        model = model_patchtst.patchtst_prefer_custom(args)
-        shutil.copy('model/PatchTST.py', ckpt_dir)
-    elif args.model_name == "FocusMergeMae":
-        model = model_focusmerge_mae.mae_prefer_custom(args)
-        shutil.copy('model/FocusMergeMae.py', ckpt_dir)
-    elif args.model_name == "PatchTSMixer":
-        model = model_patchtsmixer.patchtsmixer_prefer_custom(args)
-        shutil.copy('model/PatchTSMixer.py', ckpt_dir)
-    elif args.model_name == "ST-MEM":
-        model = model_st_mem.st_mem_prefer_custom(args)
-        shutil.copytree('model/st_mem', os.path.join(ckpt_dir, 'st_mem'))
+    if args.model_name == "ECGMind":
+        model = model_ecgmind.mae_prefer_custom(args)
+    # elif args.model_name == "Mae":
+    #     model = model_mae.mae_prefer_custom(args)
+    #     shutil.copy('model/FocusMae.py', ckpt_dir)
+    # elif args.model_name == "PatchTST":
+    #     model = model_patchtst.patchtst_prefer_custom(args)
+    #     shutil.copy('model/PatchTST.py', ckpt_dir)
+    # elif args.model_name == "FocusMergeMae":
+    #     model = model_focusmerge_mae.mae_prefer_custom(args)
+    #     shutil.copy('model/FocusMergeMae.py', ckpt_dir)
+    # elif args.model_name == "PatchTSMixer":
+    #     model = model_patchtsmixer.patchtsmixer_prefer_custom(args)
+    #     shutil.copy('model/PatchTSMixer.py', ckpt_dir)
+    # elif args.model_name == "ST-MEM":
+    #     model = model_st_mem.st_mem_prefer_custom(args)
+    #     shutil.copytree('model/st_mem', os.path.join(ckpt_dir, 'st_mem'))
     else:
         raise ValueError(f"Unknown model_name: {args.model_name}")
         
@@ -107,8 +95,7 @@ def run_pretrain(args):
             loss.backward()
 
             if args.clip_grad:
-                # patchtst需要梯度裁剪
-                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1)  # 梯度裁剪
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1)  
             
             optimizer.step()    
             all_loss += loss    
